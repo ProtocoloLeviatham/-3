@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Términos y Condiciones | Leviatham Core</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2881/2881142.png">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #020203;
+            --primary: #00f2ea;
+            --secondary: #7000ff;
+            --gold: #ffd700;
+            --danger: #ff2a2a;
+            --text-main: #ffffff;
+            --text-muted: #b0b0b0;
+            --card-bg: rgba(13, 14, 20, 0.95);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            min-height: 100vh;
+            padding-bottom: 80px;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* --- FONDO ANIMADO --- */
+        .cyber-background {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background: linear-gradient(180deg, #020203 10%, #0a0514 100%);
+        }
+        .cyber-grid {
+            position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
+            background-image: linear-gradient(rgba(112, 0, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(112, 0, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: perspective(500px) rotateX(60deg);
+            animation: gridMove 20s linear infinite; opacity: 0.4;
+        }
+        @keyframes gridMove { 0% { transform: perspective(500px) rotateX(60deg) translateY(0); } 100% { transform: perspective(500px) rotateX(60deg) translateY(50px); } }
+
+        h1, h2, h3, h4 { font-family: 'Orbitron', sans-serif; text-transform: uppercase; }
+
+        /* --- LOGO FLOTANTE (Sin Menú) --- */
+        .logo-header {
+            margin-top: 40px;
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+            text-transform: uppercase; letter-spacing: 2px; font-weight: 800; font-size: 1.5rem;
+        }
+        .logo-header i { color: var(--secondary); font-size: 2rem; text-shadow: 0 0 15px var(--secondary); }
+        .logo-header span { background: linear-gradient(90deg, #fff, var(--text-muted)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* --- CONTENEDOR LEGAL --- */
+        .legal-container { width: 100%; max-width: 900px; margin: 60px auto 0; padding: 0 20px; }
+        
+        .legal-header { text-align: center; margin-bottom: 60px; position: relative; }
+        .legal-header h1 { 
+            font-size: 2.2rem; margin-bottom: 15px; 
+            background: linear-gradient(90deg, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 242, 234, 0.2);
+        }
+        .legal-header p { color: var(--text-muted); font-size: 1rem; max-width: 600px; margin: 0 auto; line-height: 1.6; }
+        .last-update { font-size: 0.75rem; color: var(--secondary); margin-top: 15px; display: inline-block; font-weight: 700; letter-spacing: 2px; border: 1px solid var(--secondary); padding: 5px 10px; border-radius: 4px; }
+
+        /* --- TARJETAS DE SECCIÓN --- */
+        .legal-section {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            position: relative;
+            backdrop-filter: blur(10px);
+            transition: 0.3s ease;
+        }
+        .legal-section:hover { border-color: rgba(255, 255, 255, 0.15); background: rgba(255, 255, 255, 0.03); transform: translateX(5px); }
+        
+        /* Bordes de color según tipo */
+        .sec-primary { border-left: 4px solid var(--primary); }
+        .sec-money { border-left: 4px solid var(--gold); }
+        .sec-danger { border-left: 4px solid var(--danger); background: linear-gradient(90deg, rgba(255, 42, 42, 0.03), transparent); }
+        .sec-tech { border-left: 4px solid var(--secondary); }
+
+        .sec-title { 
+            display: flex; align-items: center; gap: 15px; margin-bottom: 20px; 
+            font-size: 1.2rem; color: #fff; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px;
+        }
+        .sec-title i { font-size: 1.1rem; }
+        .sec-primary .sec-title i { color: var(--primary); }
+        .sec-money .sec-title i { color: var(--gold); }
+        .sec-danger .sec-title i { color: var(--danger); }
+        .sec-tech .sec-title i { color: var(--secondary); }
+
+        .legal-text { color: #ccc; font-size: 0.95rem; line-height: 1.7; margin-bottom: 15px; text-align: justify; }
+        .legal-text strong { color: #fff; font-weight: 700; }
+        
+        ul.legal-list { list-style: none; padding-left: 0; }
+        ul.legal-list li { 
+            position: relative; padding-left: 25px; margin-bottom: 12px; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;
+        }
+        ul.legal-list li::before { 
+            content: '\f054'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; left: 0; color: var(--primary); font-size: 0.8rem; top: 3px;
+        }
+
+        /* Highlight Boxes */
+        .highlight-box {
+            background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 8px; margin-top: 20px;
+            font-size: 0.9rem; border: 1px dashed rgba(255, 255, 255, 0.1);
+        }
+        .highlight-box.danger { border-color: var(--danger); color: #ffcccc; background: rgba(255, 0, 0, 0.05); }
+        .highlight-box strong { display: block; margin-bottom: 8px; font-family: 'Orbitron'; letter-spacing: 1px; }
+
+        /* --- BOTÓN ACEPTAR --- */
+        .accept-container { margin: 50px 0; width: 100%; display: flex; justify-content: center; }
+        .btn-accept {
+            display: inline-flex; align-items: center; gap: 15px;
+            padding: 20px 40px;
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 50px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 800;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            text-decoration: none;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0, 242, 234, 0.1);
+        }
+        .btn-accept:hover {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 40px rgba(0, 242, 234, 0.6);
+            transform: scale(1.05);
+        }
+        .btn-accept i { transition: 0.3s; }
+        .btn-accept:hover i { transform: translateX(5px); }
+
+        /* Footer */
+        .legal-footer { text-align: center; margin-top: 20px; color: var(--text-muted); font-size: 0.75rem; opacity: 0.5; letter-spacing: 1px; }
+
+    </style>
+</head>
+<body>
+
+    <div class="cyber-background"><div class="cyber-grid"></div></div>
+
+    <div class="logo-header">
+        <i class="fa-solid fa-scale-balanced"></i>
+        <span>Leviatham Legal</span>
+    </div>
+
+    <div class="legal-container">
+        
+        <div class="legal-header">
+            <h1>Protocolos & Términos</h1>
+            <p>El uso de nuestros servicios implica la aceptación incondicional de las siguientes directivas operativas. Lea con atención.</p>
+            <span class="last-update">VIGENCIA: 2026-2027</span>
+        </div>
+
+        <!-- 1. AMBITO -->
+        <div class="legal-section sec-primary">
+            <h2 class="sec-title"><i class="fa-solid fa-globe"></i> 01. Ámbito del Servicio</h2>
+            <p class="legal-text">
+                <strong>Leviatham Core</strong> (en adelante "La Agencia") provee servicios de ingeniería web de alto nivel, comercialización de licencias de software y consultoría estratégica digital.
+            </p>
+            <p class="legal-text">
+                Al contratar servicios o adquirir activos en esta plataforma, el <strong>CLIENTE</strong> formaliza un contrato vinculante. La ignorancia de estas cláusulas no exime de su cumplimiento legal.
+            </p>
+        </div>
+
+        <!-- 2. PAGOS -->
+        <div class="legal-section sec-money">
+            <h2 class="sec-title"><i class="fa-solid fa-coins"></i> 02. Política de Pagos & Divisas</h2>
+            <ul class="legal-list">
+                <li><strong>A. Desarrollo a Medida:</strong> Se requiere un anticipo irrevocable del <strong>50%</strong> para iniciar operaciones. El saldo restante (50%) se liquida estrictamente <em>antes</em> de la entrega de credenciales administrativas y la migración al servidor final.</li>
+                <li><strong>B. Tienda / Plantillas:</strong> El pago es del <strong>100% por adelantado</strong>. La liberación del activo digital es automática tras la confirmación de fondos.</li>
+                <li><strong>C. Programa Partners:</strong> Regulado por contrato privado específico (Modelo estándar: 30% costo operativo / 70% a éxito).</li>
+                <li><strong>D. Divisas:</strong> Precios en <strong>ARS (Pesos Argentinos)</strong> exclusivos para residentes fiscales en Argentina. Operaciones internacionales únicamente en <strong>USD</strong> o Criptomonedas (USDT).</li>
+            </ul>
+        </div>
+
+        <!-- 3. REEMBOLSOS (CRÍTICO) -->
+        <div class="legal-section sec-danger">
+            <h2 class="sec-title"><i class="fa-solid fa-ban"></i> 03. Directiva de Reembolsos</h2>
+            <p class="legal-text">Dada la naturaleza irrevocable de nuestros servicios, aplicamos tolerancia cero en reembolsos bajo las siguientes condiciones:</p>
+            
+            <div class="highlight-box danger">
+                <strong><i class="fa-solid fa-triangle-exclamation"></i> PRODUCTOS DIGITALES (TIENDA):</strong>
+                Al tratarse de bienes inmateriales y reproducibles (código fuente), <strong>NO SE ADMITEN DEVOLUCIONES NI REEMBOLSOS</strong> una vez enviado el enlace de descarga. La compra se considera definitiva y consumada.
+            </div>
+            
+            <div class="highlight-box">
+                <strong>SERVICIOS A MEDIDA:</strong>
+                <ul class="legal-list" style="margin-top:10px; margin-bottom:0;">
+                    <li>Cancelación por el Cliente: <strong>NO se reembolsa el anticipo (50%)</strong>. Este monto cubre reserva de equipo y consultoría inicial.</li>
+                    <li>Cancelación por La Agencia: Si Leviatham cancela por fuerza mayor, se reembolsará el 100% del capital no ejecutado.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 4. PROPIEDAD INTELECTUAL -->
+        <div class="legal-section sec-tech">
+            <h2 class="sec-title"><i class="fa-solid fa-file-code"></i> 04. Propiedad Intelectual & Licencias</h2>
+            <p class="legal-text"><strong>DESARROLLO A MEDIDA:</strong><br>
+            Tras el pago total (100%), el Cliente adquiere la <strong>PROPIEDAD ABSOLUTA</strong> del código y derechos de explotación comercial.</p>
+            
+            <p class="legal-text"><strong>PLANTILLAS (TIENDA):</strong><br>
+            El Cliente adquiere una <strong>LICENCIA DE USO</strong> limitada:</p>
+            <ul class="legal-list">
+                <li><strong>Permitido:</strong> Instalación en 1 dominio comercial. Modificación libre del código.</li>
+                <li><strong>Prohibido (Anti-Piratería):</strong> Queda terminantemente prohibida la reventa, distribución gratuita ("leaking") o sub-licenciamiento. Leviatham Core monitorea la huella digital de sus productos y ejercerá acciones legales internacionales ante infracciones de Copyright.</li>
+            </ul>
+        </div>
+
+        <!-- 5. GHOSTING -->
+        <div class="legal-section sec-danger" style="border-left-color: #ff9100; background: linear-gradient(90deg, rgba(255, 145, 0, 0.05), transparent);">
+            <h2 class="sec-title" style="color: #ff9100;"><i class="fa-solid fa-ghost"></i> 05. Protocolo de Abandono (Ghosting)</h2>
+            <p class="legal-text">La Agencia garantiza el cumplimiento de plazos. Recíprocamente, el Cliente debe entregar material (Feedback/Assets) en tiempo y forma.</p>
+            
+            <div class="highlight-box">
+                <strong><i class="fa-solid fa-hourglass-end"></i> CLÁUSULA DE CADUCIDAD:</strong>
+                Si el Cliente interrumpe la comunicación o no entrega material requerido por <strong>30 días corridos</strong>, el proyecto se declarará <strong>ABANDONADO</strong>. El expediente se archivará sin derecho a devolución de fondos. La reactivación conllevará una penalización del 20% sobre el valor del contrato.
+            </div>
+        </div>
+
+        <!-- 6. GARANTIA -->
+        <div class="legal-section sec-primary">
+            <h2 class="sec-title"><i class="fa-solid fa-shield-halved"></i> 06. Garantía Técnica</h2>
+            <ul class="legal-list">
+                <li><strong>Cobertura Vitalicia:</strong> Garantizamos de por vida la reparación de <em>Bugs</em> (errores de lógica) imputables a nuestro código original.</li>
+                <li><strong>Anulación de Garantía:</strong> La cobertura cesa si:
+                    <br>A) Terceros modifican el código fuente.
+                    <br>B) Actualizaciones de entorno/plugins realizadas por el cliente rompen la compatibilidad.
+                    <br>C) Fallos derivados del proveedor de Hosting ajeno a Leviatham.</li>
+                <li><strong>Post-Entrega:</strong> Modificaciones funcionales o estéticas solicitadas tras la entrega final se cotizarán como horas de desarrollo adicionales.</li>
+            </ul>
+        </div>
+
+        <!-- 7. LIMITACION RESPONSABILIDAD -->
+        <div class="legal-section sec-tech">
+            <h2 class="sec-title"><i class="fa-solid fa-server"></i> 07. Responsabilidad Limitada</h2>
+            <p class="legal-text">
+                <strong>Infraestructura:</strong> Leviatham Core opera como consultora técnica, no como proveedora de Hosting/Dominios. No asumimos responsabilidad por pérdidas de dominio por falta de renovación o caídas de servidores de terceros.
+            </p>
+            <p class="legal-text">
+                <strong>Seguridad:</strong> Implementamos estándares industriales de seguridad. No nos responsabilizamos por vulneraciones derivadas de negligencia del usuario (contraseñas débiles, malware en equipos locales o phishing).
+            </p>
+        </div>
+
+    </div>
+
+    <div class="accept-container">
+        <a href="index.html" class="btn-accept">
+            VOLVER AL INICIO <i class="fa-solid fa-check-double"></i>
+        </a>
+    </div>
+
+    <div class="legal-footer">
+        <p>LEVIATHAM CORE SYSTEMS ©2026. TODOS LOS DERECHOS RESERVADOS.</p>
+        <p>AL NAVEGAR EN LA WEB, ESTAS ACEPTANDO LOS TERMINOS.</p>
+    </div>
+
+</body>
+</html>
