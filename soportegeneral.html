@@ -33,7 +33,7 @@
             padding-bottom: 50px;
         }
 
-        /* --- SCROLLBAR PERSONALIZADA (SLIDEBAR) --- */
+        /* --- SCROLLBAR PERSONALIZADA --- */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #0a0a0a; }
         ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; border: 1px solid #000; }
@@ -61,20 +61,26 @@
         /* --- HEADER --- */
         header {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 500px; z-index: 5000; padding: 12px 15px;
+            width: 90%; max-width: 500px; z-index: 5000; 
             background: rgba(8, 9, 14, 0.98); backdrop-filter: blur(25px);
             border: 1px solid rgba(0, 242, 234, 0.3); border-radius: 16px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.8);
             display: flex; flex-direction: column; align-items: center; transition: 0.3s ease;
+            padding: 0; 
         }
-        .header-trigger { width: 100%; display: flex; flex-direction: column; align-items: center; cursor: pointer; gap: 5px; }
+        .header-trigger { 
+            width: 100%; display: flex; flex-direction: column; align-items: center; cursor: pointer; gap: 5px; 
+            padding: 12px 15px; 
+            user-select: none; /* Evita selección de texto al hacer click */
+        }
         .logo { display: flex; align-items: center; gap: 10px; font-size: 1.3rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 10px rgba(0, 242, 234, 0.5); }
         .logo i { color: var(--primary); font-size: 1.2rem; }
         .menu-label { font-size: 0.7rem; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; display: flex; align-items: center; gap: 8px; animation: pulseGold 2s infinite; }
-        header.open .menu-arrow { transform: rotate(180deg); }
-        nav { width: 100%; max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0; }
-        nav.active { max-height: 500px; opacity: 1; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
-        nav ul { list-style: none; display: flex; flex-direction: column; gap: 8px; width: 100%; padding: 0; }
+        header.open .menu-arrow { transform: rotate(180deg); transition: transform 0.3s ease; }
+        
+        nav { width: 100%; max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease; opacity: 0; }
+        nav.active { max-height: 500px; opacity: 1; border-top: 1px solid rgba(255,255,255,0.1); }
+        nav ul { list-style: none; display: flex; flex-direction: column; gap: 8px; width: 100%; padding: 15px; margin: 0; }
         nav a { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px; color: var(--text-muted); text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: 0.2s; border: 1px solid transparent; }
         nav a:hover { background: rgba(0, 242, 234, 0.1); color: #fff; border-color: var(--primary); }
         .cta-menu { background: linear-gradient(135deg, var(--secondary), #4a00e0) !important; color: #fff !important; font-weight: 700 !important; }
@@ -90,7 +96,7 @@
         }
         .hero-support p { color: var(--text-muted); font-size: 1.1rem; max-width: 700px; margin: 0 auto; line-height: 1.6; }
 
-        /* --- TRIAGE SECTION (MEJORADA) --- */
+        /* --- TRIAGE SECTION --- */
         .triage-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; width: 100%; margin-bottom: 80px; }
         
         .channel-card {
@@ -100,7 +106,7 @@
         }
         .channel-card:hover { transform: translateY(-8px); }
         
-        /* CANAL ROJO (CRITICAL) */
+        /* CANAL ROJO */
         .ch-red { border-top: 5px solid var(--danger); box-shadow: 0 10px 40px rgba(255, 0, 85, 0.15); background: linear-gradient(180deg, rgba(255,0,85,0.05), rgba(13,14,20,0.95)); }
         .ch-red:hover { box-shadow: 0 15px 50px rgba(255, 0, 85, 0.3); border-color: var(--danger); }
         .ch-red .channel-icon { color: var(--danger); animation: pulseDanger 1.5s infinite; filter: drop-shadow(0 0 10px var(--danger)); }
@@ -110,7 +116,7 @@
             letter-spacing: 2px; box-shadow: 0 5px 20px rgba(255,0,85,0.4); font-size: 1rem;
         }
         
-        /* CANAL AZUL (TECHNICAL) */
+        /* CANAL AZUL */
         .ch-blue { border-top: 5px solid var(--primary); box-shadow: 0 10px 40px rgba(0, 242, 234, 0.15); background: linear-gradient(180deg, rgba(0,242,234,0.05), rgba(13,14,20,0.95)); }
         .ch-blue:hover { box-shadow: 0 15px 50px rgba(0, 242, 234, 0.3); border-color: var(--primary); }
         .ch-blue .channel-icon { color: var(--primary); filter: drop-shadow(0 0 10px var(--primary)); }
@@ -121,7 +127,7 @@
         }
         .btn-blue:hover { background: var(--primary); color: #000; box-shadow: 0 0 30px var(--primary); }
 
-        /* CANAL AMARILLO (BILLING) */
+        /* CANAL AMARILLO */
         .ch-yellow { border-top: 5px solid var(--gold); box-shadow: 0 10px 40px rgba(255, 215, 0, 0.15); background: linear-gradient(180deg, rgba(255,215,0,0.05), rgba(13,14,20,0.95)); }
         .ch-yellow:hover { box-shadow: 0 15px 50px rgba(255, 215, 0, 0.3); border-color: var(--gold); }
         .ch-yellow .channel-icon { color: var(--gold); }
@@ -136,7 +142,7 @@
 
         @keyframes pulseDanger { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(1.05); } 100% { opacity: 1; transform: scale(1); } }
 
-        /* --- SLA SECTION (PULIDO) --- */
+        /* --- SLA SECTION --- */
         .sla-section { width: 100%; margin-bottom: 80px; }
         .section-heading { 
             text-align: center; margin-bottom: 10px; font-size: 1.8rem; color: #fff; 
@@ -186,7 +192,11 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.8); position: relative;
         }
         
-        /* ADMIN TRIGGER - ICONO */
+        .form-intro {
+            background: rgba(0, 242, 234, 0.05); padding: 15px; border-left: 3px solid var(--primary);
+            margin-bottom: 25px; font-size: 0.85rem; color: #ccc; line-height: 1.5;
+        }
+
         .admin-trigger-icon {
             color: var(--text-muted); cursor: pointer; transition: 0.3s;
             font-size: 1.2rem; margin-left: 15px; vertical-align: middle; opacity: 0.3;
@@ -205,6 +215,13 @@
         .form-select option { background: #000; color: #fff; }
         .form-textarea { height: 150px; resize: vertical; }
         
+        .readonly-input {
+            background: rgba(0,0,0,0.3); color: #777; border-color: transparent; cursor: not-allowed; font-family: monospace;
+        }
+
+        .checkbox-container { display: flex; align-items: flex-start; gap: 10px; font-size: 0.8rem; color: #aaa; margin-bottom: 25px; }
+        .checkbox-input { margin-top: 3px; accent-color: var(--primary); }
+
         .btn-submit { 
             width: 100%; padding: 18px; background: linear-gradient(90deg, var(--secondary), var(--primary)); 
             border: none; border-radius: 8px; color: #000; font-weight: 800; font-family: 'Orbitron'; 
@@ -220,7 +237,56 @@
         .bounty-title { color: var(--danger); font-size: 1.2rem; margin-bottom: 5px; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; }
         .bounty-text { color: #ccc; font-size: 0.95rem; }
 
-        /* --- ADMIN MODAL (PULIDO) --- */
+        /* --- LEGAL TERMS FOOTER --- */
+        .legal-terminal {
+            width: 100%; max-width: 900px; margin: 0 auto 50px;
+            background: #000; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px;
+            padding: 20px; font-family: 'Courier New', monospace;
+            position: relative; overflow: hidden;
+        }
+        .legal-terminal::before {
+            content: "TERMINAL_LEGAL_V2.4 :: READ_ONLY";
+            display: block; color: var(--secondary); font-size: 0.7rem; border-bottom: 1px solid #333;
+            padding-bottom: 10px; margin-bottom: 15px; letter-spacing: 1px;
+        }
+        .terms-content {
+            font-size: 0.75rem; color: #666; text-align: justify; line-height: 1.6;
+            max-height: 200px; overflow-y: auto; padding-right: 10px;
+        }
+        .terms-content strong { color: #888; }
+        
+        /* --- SIGNATURE 33 --- */
+        .footer-signature {
+            width: 100%; text-align: center; margin-top: 50px; padding: 40px 0;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+        }
+        .signature-3d {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #111;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            transform: skew(-15deg) rotate(-5deg);
+            display: inline-block;
+            text-shadow: 
+                2px 2px 0px var(--primary),
+                4px 4px 0px var(--secondary),
+                0 0 20px rgba(0, 242, 234, 0.5);
+            transition: all 0.5s ease;
+            cursor: help;
+        }
+        .signature-3d:hover {
+            transform: skew(0deg) rotate(0deg) scale(1.1);
+            color: #fff;
+            text-shadow: 0 0 30px var(--primary);
+        }
+        .signature-sub {
+            display: block; margin-top: 15px; font-size: 0.7rem; color: #333; letter-spacing: 2px;
+        }
+
+        /* --- ADMIN MODAL --- */
         .admin-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98);
             z-index: 10000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(20px);
@@ -232,14 +298,12 @@
         }
         .close-admin { position: absolute; top: 20px; right: 20px; color: #fff; cursor: pointer; font-size: 1.5rem; transition: 0.3s; }
         .close-admin:hover { color: var(--danger); }
-        
         .admin-login { text-align: center; max-width: 400px; margin: 0 auto; }
-        
-        /* Tickets Layout */
         .admin-tickets { display: none; }
+        
         .ticket-item { 
             background: rgba(255,255,255,0.02); padding: 20px; margin-bottom: 15px; border-radius: 8px; 
-            border-left: 4px solid var(--secondary); transition: 0.2s; word-wrap: break-word; /* Fix Overflow */
+            border-left: 4px solid var(--secondary); transition: 0.2s; word-wrap: break-word; 
         }
         .ticket-item:hover { background: rgba(255,255,255,0.04); }
         .ticket-meta { 
@@ -260,8 +324,8 @@
 
     <div class="cyber-background"><div class="cyber-grid"></div></div>
 
-    <header id="header-trigger">
-        <div class="header-trigger">
+    <header>
+        <div class="header-trigger" id="header-trigger-btn">
             <div class="logo"><i class="fa-solid fa-layer-group"></i><span class="logo-text">Leviatham</span></div>
             <div class="menu-label">MENÚ PRINCIPAL [ TOCAR ] <i class="fa-solid fa-chevron-down menu-arrow"></i></div>
         </div>
@@ -286,7 +350,6 @@
         </div>
 
         <div class="triage-grid">
-            <!-- ROJO -->
             <div class="channel-card ch-red">
                 <div class="channel-header">
                     <i class="fa-solid fa-biohazard channel-icon"></i>
@@ -301,7 +364,6 @@
                 </a>
             </div>
 
-            <!-- AZUL -->
             <div class="channel-card ch-blue">
                 <div class="channel-header">
                     <i class="fa-solid fa-microchip channel-icon"></i>
@@ -316,7 +378,6 @@
                 </button>
             </div>
 
-            <!-- AMARILLO -->
             <div class="channel-card ch-yellow">
                 <div class="channel-header">
                     <i class="fa-solid fa-file-signature channel-icon"></i>
@@ -384,38 +445,64 @@
         </div>
 
         <div class="ticket-form-section" id="ticketFormSection">
-            <div style="display:flex; justify-content:center; align-items:center; margin-bottom:30px;">
-                <h2 style="color:#fff; font-family:'Orbitron'; margin:0;">NUEVO TICKET</h2>
+            <div style="display:flex; justify-content:center; align-items:center; margin-bottom:20px;">
+                <h2 style="color:#fff; font-family:'Orbitron'; margin:0; text-transform:uppercase;">Sistema de Incidencias</h2>
                 <i class="fa-solid fa-shield-halved admin-trigger-icon" id="secretAdminTrigger" title="Secure Area"></i>
             </div>
             
+            <div class="form-intro">
+                <strong><i class="fa-solid fa-triangle-exclamation"></i> PROTOCOLO DE INGRESO:</strong> Complete todos los campos con precisión técnica. Los tickets con información insuficiente serán rechazados automáticamente por el sistema.
+                <br><em>* Los tickets marcados erróneamente como "Urgencia" penalizan su ranking de cliente.</em>
+            </div>
+
             <form id="supportForm">
-                <div class="form-group">
-                    <label class="form-label">MOTIVO DE CONSULTA</label>
-                    <select class="form-select" id="ticketType" required>
-                        <option value="Bug">Reportar Error (Bug)</option>
-                        <option value="Duda">Duda de Uso</option>
-                        <option value="Cambio">Solicitud de Cambio</option>
-                        <option value="Urgencia">Urgencia P2</option>
-                    </select>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="form-group">
+                        <label class="form-label">TIPO DE SOLICITUD</label>
+                        <select class="form-select" id="ticketType" required>
+                            <option value="Bug">Reportar Bug / Fallo</option>
+                            <option value="Duda">Duda Técnica</option>
+                            <option value="Contenido">Cambio de Contenido</option>
+                            <option value="Hosting">Problema de Servidor</option>
+                            <option value="Urgencia">S.O.S (Impacto Alto)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">PRIORIDAD AUTO-PERCIBIDA</label>
+                        <select class="form-select" id="ticketPriority">
+                            <option value="Baja">Baja (Puede esperar)</option>
+                            <option value="Media" selected>Media (Normal)</option>
+                            <option value="Alta">Alta (Afecta ventas)</option>
+                        </select>
+                    </div>
                 </div>
-                
+
                 <div class="form-group">
-                    <label class="form-label">DETALLE DEL PROBLEMA</label>
-                    <textarea class="form-textarea" id="ticketMsg" placeholder="Describe lo que sucede con el mayor detalle posible..." required></textarea>
+                    <label class="form-label">DESCRIPCIÓN TÉCNICA DEL PROBLEMA</label>
+                    <textarea class="form-textarea" id="ticketMsg" placeholder="1. Qué estabas haciendo&#10;2. Qué esperabas que pasara&#10;3. Qué pasó realmente..." required></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">¿POR DÓNDE TE CONTACTAMOS?</label>
-                    <input type="text" class="form-input" id="ticketContact" placeholder="Email o WhatsApp (Indicar prefijo)" required>
+                    <label class="form-label">DATOS DE CONTACTO</label>
+                    <input type="text" class="form-input" id="ticketContact" placeholder="Email o WhatsApp (con código de área)" required>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">ENLACE DE TU PÁGINA (HTTPS)</label>
-                    <input type="url" class="form-input" id="ticketLink" placeholder="https://tunsitio.com" required>
+                    <label class="form-label">ENLACE AFECTADO (URL)</label>
+                    <input type="url" class="form-input" id="ticketLink" placeholder="https://tunsitio.com/pagina-error" required>
                 </div>
 
-                <button type="submit" class="btn-submit">ENVIAR TICKET AL SISTEMA</button>
+                <div class="form-group">
+                    <label class="form-label">TU ENTORNO (DETECTADO AUTOMÁTICAMENTE)</label>
+                    <input type="text" class="form-input readonly-input" id="userAgentField" readonly>
+                </div>
+
+                <div class="checkbox-container">
+                    <input type="checkbox" class="checkbox-input" required>
+                    <span><strong>CONFIRMACIÓN DE CARGO:</strong> Entiendo que si el error reportado es causado por manipulación externa, plugins no autorizados o error humano del cliente, se generará una factura por hora técnica según el tarifario vigente.</span>
+                </div>
+
+                <button type="submit" class="btn-submit">ENVIAR A LA MATRIZ</button>
             </form>
         </div>
 
@@ -424,9 +511,32 @@
             <p class="bounty-text">¿Encontraste un error en nuestra propia infraestructura? Reportalo y gana descuentos en tu próximo mes de mantenimiento.</p>
         </div>
 
+        <div class="legal-terminal">
+            <div class="terms-content">
+                <strong>1. OBJETO Y ALCANCE</strong><br>
+                El presente acuerdo de nivel de servicio (SLA) regula la prestación de soporte técnico por parte de Leviatham Core. El servicio se limita estrictamente al mantenimiento de la infraestructura y código provisto originalmente. Modificaciones de terceros anulan automáticamente la garantía.<br><br>
+                
+                <strong>2. EXCLUSIONES DE RESPONSABILIDAD</strong><br>
+                Leviatham Core no será responsable por lucro cesante, pérdida de oportunidades comerciales o daños indirectos derivados de interrupciones del servicio, fallos de proveedores externos (Google, AWS, hosting) o ataques cibernéticos de fuerza mayor.<br><br>
+
+                <strong>3. TIEMPOS DE RESPUESTA VS. RESOLUCIÓN</strong><br>
+                Los tiempos indicados en la tabla SLA refieren al tiempo máximo para el *inicio del diagnóstico*. La resolución final dependerá de la complejidad del incidente. Las solicitudes enviadas fuera de horario comercial serán procesadas al siguiente día hábil, salvo clientes con plan "Elite Guard".<br><br>
+
+                <strong>4. PROPIEDAD INTELECTUAL</strong><br>
+                Todo código desarrollado para la solución de bugs permanece como propiedad intelectual de Leviatham Core hasta la cancelación total de las facturas pendientes.<br><br>
+                
+                <strong>5. JURISDICCIÓN</strong><br>
+                Cualquier disputa legal se someterá a los tribunales arbitrales designados por Leviatham Core en la jurisdicción correspondiente.
+            </div>
+        </div>
+        
+        <div class="footer-signature">
+            <div class="signature-3d">33discosduros</div>
+            <span class="signature-sub">LEVIATHAM CORE ARCHITECT</span>
+        </div>
+
     </div>
 
-    <!-- ADMIN MODAL -->
     <div class="admin-modal" id="adminModal">
         <div class="admin-content">
             <span class="close-admin" id="closeAdmin">&times;</span>
@@ -453,165 +563,224 @@
     </div>
 
     <script type="module">
+        // ==========================================
+        // 1. UI LOGIC (CRITICAL - MUST RUN FIRST)
+        // ==========================================
+        
+        // Header Logic (Fixed for Publication)
+        const headerBtn = document.getElementById('header-trigger-btn');
+        const navMenu = document.getElementById('nav-menu');
+        const header = document.querySelector('header');
+        
+        // Check if elements exist before adding listeners to avoid null errors
+        if(headerBtn && navMenu) {
+            headerBtn.addEventListener('click', (e) => {
+                e.preventDefault(); // Prevent weird default behaviors
+                e.stopPropagation(); // Stop event bubbling
+                navMenu.classList.toggle('active');
+                header.classList.toggle('open');
+                console.log('Menu toggled'); // Debug
+            });
+        } else {
+            console.error("Critical UI Error: Menu elements not found in DOM");
+        }
+
+        // Scroll to form
+        const createBtn = document.getElementById('btnCreateTicket');
+        if(createBtn) {
+            createBtn.addEventListener('click', () => {
+                const formSection = document.getElementById('ticketFormSection');
+                if(formSection) formSection.scrollIntoView({behavior: 'smooth'});
+            });
+        }
+
+        // Auto-fill User Agent
+        const uaField = document.getElementById('userAgentField');
+        if(uaField) {
+            uaField.value = navigator.platform + " | " + navigator.userAgent.split(') ')[0] + ")";
+        }
+
+        // ==========================================
+        // 2. FIREBASE LOGIC (WRAPPED FOR SAFETY)
+        // ==========================================
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, query, orderBy, Timestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // CONFIGURACIÓN FIREBASE ROBUSTA
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
-            apiKey: "", 
-            authDomain: "tarotastral-dc552.firebaseapp.com",
-            projectId: "tarotastral-dc552",
-            storageBucket: "tarotastral-dc552.firebasestorage.app",
-            messagingSenderId: "666976665528",
-            appId: "1:666976665528:web:c2b4c27c3e50b9a953194d"
-        };
+        // Wrap in a try-catch to prevent JS crash if config is missing
+        try {
+            const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+                apiKey: "", 
+                authDomain: "tarotastral-dc552.firebaseapp.com",
+                projectId: "tarotastral-dc552",
+                storageBucket: "tarotastral-dc552.firebasestorage.app",
+                messagingSenderId: "666976665528",
+                appId: "1:666976665528:web:c2b4c27c3e50b9a953194d"
+            };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : "default-app-id";
-        
-        // AUTENTICACIÓN
-        const initAuth = async () => {
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-            } catch (error) {
-                console.error("Auth Error:", error);
-            }
-        };
-        initAuth();
-
-        // LÓGICA DE FORMULARIO
-        document.getElementById('supportForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.querySelector('.btn-submit');
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ENVIANDO A LA RED...';
-            btn.disabled = true;
+            const app = initializeApp(firebaseConfig);
+            const db = getFirestore(app);
+            const auth = getAuth(app);
+            const appId = typeof __app_id !== 'undefined' ? __app_id : "default-app-id";
             
-            try {
-                if (!auth.currentUser) {
-                     await new Promise((resolve) => {
-                        const unsubscribe = onAuthStateChanged(auth, (user) => {
-                            if (user) { unsubscribe(); resolve(user); }
-                        });
-                     });
+            // AUTENTICACIÓN
+            const initAuth = async () => {
+                try {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                } catch (error) {
+                    console.error("Auth Error:", error);
                 }
+            };
+            initAuth();
 
-                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'tickets'), {
-                    type: document.getElementById('ticketType').value,
-                    msg: document.getElementById('ticketMsg').value,
-                    contact: document.getElementById('ticketContact').value,
-                    link: document.getElementById('ticketLink').value,
-                    date: Timestamp.now()
-                });
-
-                alert('TICKET REGISTRADO EN EL NÚCLEO. TIEMPO DE RESPUESTA: SEGÚN SLA.');
-                document.getElementById('supportForm').reset();
-            } catch (error) {
-                console.error("Error:", error);
-                alert('ERROR DE CONEXIÓN AL NÚCLEO.');
-            } finally {
-                btn.innerHTML = 'ENVIAR TICKET AL SISTEMA';
-                btn.disabled = false;
-            }
-        });
-
-        // ADMIN PANEL LOGIC (NUEVO TRIGGER)
-        const trigger = document.getElementById('secretAdminTrigger');
-        const modal = document.getElementById('adminModal');
-        const closeBtn = document.getElementById('closeAdmin');
-        const unlockBtn = document.getElementById('btnUnlock');
-        const loginScreen = document.getElementById('adminLoginScreen');
-        const dashboard = document.getElementById('adminDashboard');
-        const ticketsList = document.getElementById('ticketsList');
-        let clickCount = 0;
-
-        trigger.addEventListener('click', () => {
-            clickCount++;
-            if(clickCount === 5) {
-                modal.style.display = 'flex';
-                clickCount = 0;
-            }
-        });
-
-        closeBtn.addEventListener('click', () => {
-            modal.style.display = 'none';
-            loginScreen.style.display = 'block';
-            dashboard.style.display = 'none';
-            document.getElementById('adminPass').value = '';
-            document.getElementById('loginError').style.display = 'none';
-        });
-
-        unlockBtn.addEventListener('click', async () => {
-            const pass = document.getElementById('adminPass').value;
-            if(pass === "Leviatham33") {
-                loginScreen.style.display = 'none';
-                dashboard.style.display = 'block';
-                loadTickets();
-            } else {
-                document.getElementById('loginError').style.display = 'block';
-            }
-        });
-
-        window.loadTickets = async function() {
-            ticketsList.innerHTML = '<p style="color:#888; text-align:center;">Descifrando base de datos...</p>';
-            try {
-                const q = query(collection(db, 'artifacts', appId, 'public', 'data', 'tickets'), orderBy("date", "desc")); 
-                const querySnapshot = await getDocs(q);
-                
-                ticketsList.innerHTML = '';
-                if(querySnapshot.empty) {
-                    ticketsList.innerHTML = '<p style="text-align:center; color:#666;">NO HAY TICKETS ACTIVOS EN LA MATRIZ.</p>';
-                    return;
-                }
-
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    const date = data.date ? data.date.toDate().toLocaleString() : 'N/A';
+            // FORM SUBMIT LOGIC
+            const supportForm = document.getElementById('supportForm');
+            if(supportForm) {
+                supportForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const btn = document.querySelector('.btn-submit');
+                    const originalText = btn.innerHTML;
+                    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ENVIANDO...';
+                    btn.disabled = true;
                     
-                    const ticketHTML = `
-                        <div class="ticket-item">
-                            <div class="ticket-meta">
-                                <span><i class="fa-regular fa-clock"></i> ${date}</span>
-                                <span style="color:var(--secondary)">ID: ${doc.id.substr(0,5).toUpperCase()}</span>
-                            </div>
-                            <div class="ticket-reason">[${data.type.toUpperCase()}]</div>
-                            <div class="ticket-body">
-                                ${data.msg}
-                                <br><br>
-                                <strong style="color:var(--primary);"><i class="fa-solid fa-address-card"></i> ${data.contact}</strong>
-                            </div>
-                            <a href="${data.link}" target="_blank" class="ticket-link"><i class="fa-solid fa-link"></i> VER SITIO</a>
-                        </div>
-                    `;
-                    ticketsList.innerHTML += ticketHTML;
+                    try {
+                        if (!auth.currentUser) {
+                             await new Promise((resolve) => {
+                                const unsubscribe = onAuthStateChanged(auth, (user) => {
+                                    if (user) { unsubscribe(); resolve(user); }
+                                });
+                             });
+                        }
+
+                        // Collect Data
+                        const ticketData = {
+                            type: document.getElementById('ticketType').value,
+                            priority: document.getElementById('ticketPriority').value,
+                            msg: document.getElementById('ticketMsg').value,
+                            contact: document.getElementById('ticketContact').value,
+                            link: document.getElementById('ticketLink').value,
+                            env: document.getElementById('userAgentField').value,
+                            date: Timestamp.now(),
+                            status: 'open'
+                        };
+
+                        await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'tickets'), ticketData);
+
+                        alert('TICKET REGISTRADO EN EL NÚCLEO. ID GENERADO.');
+                        supportForm.reset();
+                        // Reset readonly field
+                        document.getElementById('userAgentField').value = navigator.platform + " | " + navigator.userAgent.split(') ')[0] + ")";
+
+                    } catch (error) {
+                        console.error("Error:", error);
+                        alert('ERROR DE CONEXIÓN AL NÚCLEO. INTENTE WHATSAPP.');
+                    } finally {
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                    }
                 });
-            } catch (e) {
-                ticketsList.innerHTML = '<p style="color:red; text-align:center;">ERROR DE LECTURA DE DATOS.</p>';
-                console.error(e);
             }
+
+            // ADMIN PANEL LOGIC
+            const trigger = document.getElementById('secretAdminTrigger');
+            const modal = document.getElementById('adminModal');
+            const closeBtn = document.getElementById('closeAdmin');
+            const unlockBtn = document.getElementById('btnUnlock');
+            const loginScreen = document.getElementById('adminLoginScreen');
+            const dashboard = document.getElementById('adminDashboard');
+            const ticketsList = document.getElementById('ticketsList');
+            let clickCount = 0;
+
+            if(trigger) {
+                trigger.addEventListener('click', () => {
+                    clickCount++;
+                    if(clickCount === 5) {
+                        modal.style.display = 'flex';
+                        clickCount = 0;
+                    }
+                });
+            }
+
+            if(closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    modal.style.display = 'none';
+                    loginScreen.style.display = 'block';
+                    dashboard.style.display = 'none';
+                    document.getElementById('adminPass').value = '';
+                    document.getElementById('loginError').style.display = 'none';
+                });
+            }
+
+            if(unlockBtn) {
+                unlockBtn.addEventListener('click', async () => {
+                    const pass = document.getElementById('adminPass').value;
+                    if(pass === "Leviatham33") {
+                        loginScreen.style.display = 'none';
+                        dashboard.style.display = 'block';
+                        loadTickets();
+                    } else {
+                        document.getElementById('loginError').style.display = 'block';
+                    }
+                });
+            }
+
+            // Global scope for HTML onclick
+            window.loadTickets = async function() {
+                ticketsList.innerHTML = '<p style="color:#888; text-align:center;">Descifrando base de datos...</p>';
+                try {
+                    const q = query(collection(db, 'artifacts', appId, 'public', 'data', 'tickets'), orderBy("date", "desc")); 
+                    const querySnapshot = await getDocs(q);
+                    
+                    ticketsList.innerHTML = '';
+                    if(querySnapshot.empty) {
+                        ticketsList.innerHTML = '<p style="text-align:center; color:#666;">NO HAY TICKETS ACTIVOS EN LA MATRIZ.</p>';
+                        return;
+                    }
+
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        const date = data.date ? data.date.toDate().toLocaleString() : 'N/A';
+                        
+                        // Safety check for fields
+                        const priority = data.priority || 'N/A';
+                        const env = data.env || 'Unknown';
+
+                        const ticketHTML = `
+                            <div class="ticket-item">
+                                <div class="ticket-meta">
+                                    <span><i class="fa-regular fa-clock"></i> ${date}</span>
+                                    <span style="color:var(--secondary)">ID: ${doc.id.substr(0,5).toUpperCase()}</span>
+                                </div>
+                                <div class="ticket-reason">
+                                    <span style="color:${priority === 'Alta' ? 'var(--danger)' : 'var(--primary)'}">[${priority.toUpperCase()}]</span> 
+                                    ${data.type.toUpperCase()}
+                                </div>
+                                <div class="ticket-body">
+                                    ${data.msg}
+                                    <br><br>
+                                    <div style="font-size:0.8rem; color:#666; border-top:1px dashed #333; padding-top:5px; margin-top:5px;">
+                                        SYS: ${env}
+                                    </div>
+                                    <strong style="color:var(--primary);"><i class="fa-solid fa-address-card"></i> ${data.contact}</strong>
+                                </div>
+                                <a href="${data.link}" target="_blank" class="ticket-link"><i class="fa-solid fa-link"></i> VER SITIO</a>
+                            </div>
+                        `;
+                        ticketsList.innerHTML += ticketHTML;
+                    });
+                } catch (e) {
+                    ticketsList.innerHTML = '<p style="color:red; text-align:center;">ERROR DE LECTURA DE DATOS.</p>';
+                    console.error(e);
+                }
+            }
+        } catch (globalErr) {
+            console.error("Firebase Core Error:", globalErr);
+            // Even if Firebase fails, the menu (UI LOGIC above) will still work.
         }
-
-        // Header Logic
-        const headerTrigger = document.getElementById('header-trigger');
-        const navMenu = document.getElementById('nav-menu');
-        const header = document.querySelector('header');
-        headerTrigger.addEventListener('click', (e) => {
-            if (!e.target.closest('a')) {
-                navMenu.classList.toggle('active');
-                header.classList.toggle('open');
-            }
-        });
-
-        // Scroll to form
-        document.getElementById('btnCreateTicket').addEventListener('click', () => {
-            document.getElementById('ticketFormSection').scrollIntoView({behavior: 'smooth'});
-        });
     </script>
 
 </body>
