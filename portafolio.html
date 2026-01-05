@@ -33,6 +33,7 @@
             padding-bottom: 50px;
         }
 
+        /* --- FONDO ANIMADO --- */
         .cyber-background {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
             background: linear-gradient(180deg, #020203 10%, #0a0514 100%);
@@ -87,17 +88,31 @@
             position: relative; overflow: hidden; transition: all 0.4s ease;
             box-shadow: 0 15px 40px rgba(0,0,0,0.6); display: flex; flex-direction: column;
             transform-style: preserve-3d; min-height: 520px;
+            border-top: 3px solid transparent;
         }
-        .project-card:hover { transform: translateY(-10px) scale(1.01); border-color: var(--primary); box-shadow: 0 0 30px rgba(0, 242, 234, 0.2); }
+        .project-card:hover { transform: translateY(-10px) scale(1.01); border-color: var(--primary); box-shadow: 0 0 40px rgba(0, 242, 234, 0.2); }
 
+        /* COLORES DE TARJETAS */
+        .card-astralis { border-top-color: #9d00ff !important; }
+        .card-comic { border-top-color: #ffaa00 !important; }
+        .card-classified { border-top-color: #333 !important; background: rgba(10,10,10,0.95) !important; }
+
+        /* SELLO LEVIATHAM MEJORADO (RADAR) */
         .leviatham-seal {
-            position: absolute; top: 15px; right: 15px; width: 50px; height: 50px;
-            border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            opacity: 0.9; animation: rotateSeal 20s linear infinite; z-index: 10;
-            background: rgba(0,0,0,0.8); box-shadow: 0 0 15px rgba(255,215,0,0.3);
+            position: absolute; top: 15px; right: 15px; width: 70px; height: 70px;
+            border: 2px dashed var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            z-index: 10; background: rgba(0,0,0,0.9); box-shadow: 0 0 20px rgba(255,215,0,0.2);
+            animation: pulseGlow 3s infinite alternate;
         }
-        .seal-inner { font-size: 0.5rem; color: var(--gold); text-align: center; font-weight: 800; letter-spacing: 1px; }
-        @keyframes rotateSeal { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .seal-ring {
+            position: absolute; width: 100%; height: 100%; border-radius: 50%;
+            border-top: 2px solid var(--gold); border-right: 2px solid transparent;
+            animation: rotateSeal 4s linear infinite;
+        }
+        .seal-inner { font-size: 0.55rem; color: var(--gold); text-align: center; font-weight: 900; letter-spacing: 0.5px; line-height: 1.1; text-shadow: 0 0 5px var(--gold); }
+        
+        @keyframes rotateSeal { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulseGlow { 0% { box-shadow: 0 0 10px rgba(255,215,0,0.2); } 100% { box-shadow: 0 0 25px rgba(255,215,0,0.6); } }
 
         .card-body { padding: 35px 25px; flex-grow: 1; display: flex; flex-direction: column; position: relative; z-index: 2; }
 
@@ -127,7 +142,15 @@
         }
         .project-btn:hover { background: var(--primary); color: #000; box-shadow: 0 0 25px var(--primary); }
 
-        /* --- SECCIÓN WORKFLOW (PROTOCOLO) --- */
+        /* Estilos Clasificados (???) */
+        .card-classified .project-icon { color: #555; text-shadow: none; }
+        .card-classified .project-btn { border-color: #444; color: #666; cursor: not-allowed; }
+        .card-classified .project-btn:hover { background: transparent; color: #666; box-shadow: none; }
+        .card-classified .leviatham-seal { border-color: #444; box-shadow: none; animation: none; }
+        .card-classified .seal-inner { color: #555; text-shadow: none; }
+        .card-classified .seal-ring { border-top-color: #555; animation: rotateSeal 10s linear infinite; }
+
+        /* --- SECCIÓN WORKFLOW --- */
         .workflow-section { width: 100%; max-width: 900px; margin-bottom: 100px; }
         .section-header { text-align: center; margin-bottom: 50px; }
         .section-header h2 { font-size: 2rem; color: #fff; text-transform: uppercase; text-shadow: 0 0 20px rgba(112, 0, 255, 0.5); }
@@ -219,8 +242,9 @@
 
         <div class="projects-grid">
 
-            <div class="project-card">
-                <div class="leviatham-seal"><div class="seal-inner">LEVIATHAM<br>CERTIFIED</div></div>
+            <!-- PROYECTO 1 -->
+            <div class="project-card card-astralis">
+                <div class="leviatham-seal"><div class="seal-ring"></div><div class="seal-inner">LEVIATHAM<br>CERTIFIED</div></div>
                 <div class="card-body">
                     <div class="project-header">
                         <i class="fa-solid fa-moon project-icon"></i>
@@ -230,10 +254,11 @@
                         </div>
                     </div>
                     <div class="tech-bio">
-                        Plataforma de generación de ingresos pasivos. Sistema de tiradas de tarot y horóscopo diario generado 100% por <strong>IA Leviatham</strong>, sin intervención humana. Optimizado para retención de usuario.
+                        Plataforma de generación de ingresos pasivos. Sistema de tiradas de tarot y horóscopo diario generado 100% por <strong>IA Leviatham</strong>, sin intervención humana.
                     </div>
                     <div class="data-grid">
-                        <div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-yes">SÍ</span></div>
+                        <div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-yes">SÍ (Mongo)</span></div>
+                        <div class="data-row"><span class="data-label">Plataforma:</span><span class="val-norm">Web App</span></div>
                         <div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">12</span></div>
                         <div class="data-row"><span class="data-label">Anuncios:</span><span class="val-yes">SÍ</span></div>
                         <div class="data-row"><span class="data-label">IA:</span><span class="val-yes">SÍ</span></div>
@@ -242,8 +267,9 @@
                 </div>
             </div>
 
-            <div class="project-card">
-                <div class="leviatham-seal"><div class="seal-inner">LEVIATHAM<br>CERTIFIED</div></div>
+            <!-- PROYECTO 2 -->
+            <div class="project-card card-comic">
+                <div class="leviatham-seal"><div class="seal-ring"></div><div class="seal-inner">LEVIATHAM<br>CERTIFIED</div></div>
                 <div class="card-body">
                     <div class="project-header">
                         <i class="fa-solid fa-gamepad project-icon" style="color:var(--secondary); text-shadow:0 0 10px var(--secondary);"></i>
@@ -253,10 +279,11 @@
                         </div>
                     </div>
                     <div class="tech-bio">
-                        Portal de entretenimiento masivo. Lector de cómics optimizado, integración de <strong>Juegos 2D</strong> en navegador, foros de discusión y sistema de rangos de usuario gamificado.
+                        Portal de entretenimiento masivo. Lector de cómics optimizado, integración de <strong>Juegos 2D</strong> en navegador, foros de discusión y sistema de gamificación.
                     </div>
                     <div class="data-grid">
-                        <div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-yes">SÍ</span></div>
+                        <div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-yes">SÍ (SQL)</span></div>
+                        <div class="data-row"><span class="data-label">Plataforma:</span><span class="val-norm">PWA / Web</span></div>
                         <div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">25+</span></div>
                         <div class="data-row"><span class="data-label">Anuncios:</span><span class="val-yes">SÍ</span></div>
                         <div class="data-row"><span class="data-label">IA:</span><span class="val-no">NO</span></div>
@@ -265,29 +292,100 @@
                 </div>
             </div>
 
-            <div class="project-card">
-                <div class="leviatham-seal"><div class="seal-inner">???</div></div>
+            <!-- 8 TARJETAS CLASIFICADAS (???) -->
+            <!-- Tarjeta 3 -->
+            <div class="project-card card-classified">
+                <div class="leviatham-seal"><div class="seal-ring"></div><div class="seal-inner">NDA<br>LOCKED</div></div>
                 <div class="card-body">
-                    <div class="project-header"><i class="fa-solid fa-code project-icon" style="color:#555;"></i><div><h3 class="project-title">???</h3><span class="project-desc">Confidencial</span></div></div>
-                    <div class="tech-bio">Proyecto bajo acuerdo de confidencialidad (NDA). Desarrollo de infraestructura en curso.</div>
-                    <div class="data-grid"><div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Anuncios:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">IA:</span><span class="val-norm">???</span></div></div>
-                    <a href="#" class="project-btn" style="border-color:#333; color:#555;">PRÓXIMAMENTE</a>
+                    <div class="project-header"><i class="fa-solid fa-file-shield project-icon"></i><div><h3 class="project-title">???</h3><span class="project-desc">CONFIDENCIAL</span></div></div>
+                    <div class="tech-bio">Proyecto bajo Acuerdo de Confidencialidad (NDA). Infraestructura Fintech de alto nivel en desarrollo.</div>
+                    <div class="data-grid">
+                        <div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-norm">???</span></div>
+                        <div class="data-row"><span class="data-label">Plataforma:</span><span class="val-norm">???</span></div>
+                        <div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">???</span></div>
+                        <div class="data-row"><span class="data-label">Anuncios:</span><span class="val-norm">???</span></div>
+                        <div class="data-row"><span class="data-label">IA:</span><span class="val-norm">???</span></div>
+                    </div>
+                    <a href="#" class="project-btn">ACCESO DENEGADO</a>
                 </div>
             </div>
-            <div class="project-card"><div class="leviatham-seal"><div class="seal-inner">???</div></div><div class="card-body"><div class="project-header"><i class="fa-solid fa-code project-icon" style="color:#555;"></i><div><h3 class="project-title">???</h3><span class="project-desc">Confidencial</span></div></div><div class="tech-bio">Proyecto bajo acuerdo de confidencialidad (NDA). Desarrollo de infraestructura en curso.</div><div class="data-grid"><div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Anuncios:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">IA:</span><span class="val-norm">???</span></div></div><a href="#" class="project-btn" style="border-color:#333; color:#555;">PRÓXIMAMENTE</a></div></div>
-            <div class="project-card"><div class="leviatham-seal"><div class="seal-inner">???</div></div><div class="card-body"><div class="project-header"><i class="fa-solid fa-code project-icon" style="color:#555;"></i><div><h3 class="project-title">???</h3><span class="project-desc">Confidencial</span></div></div><div class="tech-bio">Proyecto bajo acuerdo de confidencialidad (NDA). Desarrollo de infraestructura en curso.</div><div class="data-grid"><div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Anuncios:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">IA:</span><span class="val-norm">???</span></div></div><a href="#" class="project-btn" style="border-color:#333; color:#555;">PRÓXIMAMENTE</a></div></div>
-            <div class="project-card"><div class="leviatham-seal"><div class="seal-inner">???</div></div><div class="card-body"><div class="project-header"><i class="fa-solid fa-code project-icon" style="color:#555;"></i><div><h3 class="project-title">???</h3><span class="project-desc">Confidencial</span></div></div><div class="tech-bio">Proyecto bajo acuerdo de confidencialidad (NDA). Desarrollo de infraestructura en curso.</div><div class="data-grid"><div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Anuncios:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">IA:</span><span class="val-norm">???</span></div></div><a href="#" class="project-btn" style="border-color:#333; color:#555;">PRÓXIMAMENTE</a></div></div>
-            <div class="project-card"><div class="leviatham-seal"><div class="seal-inner">???</div></div><div class="card-body"><div class="project-header"><i class="fa-solid fa-code project-icon" style="color:#555;"></i><div><h3 class="project-title">???</h3><span class="project-desc">Confidencial</span></div></div><div class="tech-bio">Proyecto bajo acuerdo de confidencialidad (NDA). Desarrollo de infraestructura en curso.</div><div class="data-grid"><div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Anuncios:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">IA:</span><span class="val-norm">???</span></div></div><a href="#" class="project-btn" style="border-color:#333; color:#555;">PRÓXIMAMENTE</a></div></div>
-            <div class="project-card"><div class="leviatham-seal"><div class="seal-inner">???</div></div><div class="card-body"><div class="project-header"><i class="fa-solid fa-code project-icon" style="color:#555;"></i><div><h3 class="project-title">???</h3><span class="project-desc">Confidencial</span></div></div><div class="tech-bio">Proyecto bajo acuerdo de confidencialidad (NDA). Desarrollo de infraestructura en curso.</div><div class="data-grid"><div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Anuncios:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">IA:</span><span class="val-norm">???</span></div></div><a href="#" class="project-btn" style="border-color:#333; color:#555;">PRÓXIMAMENTE</a></div></div>
-            <div class="project-card"><div class="leviatham-seal"><div class="seal-inner">???</div></div><div class="card-body"><div class="project-header"><i class="fa-solid fa-code project-icon" style="color:#555;"></i><div><h3 class="project-title">???</h3><span class="project-desc">Confidencial</span></div></div><div class="tech-bio">Proyecto bajo acuerdo de confidencialidad (NDA). Desarrollo de infraestructura en curso.</div><div class="data-grid"><div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Anuncios:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">IA:</span><span class="val-norm">???</span></div></div><a href="#" class="project-btn" style="border-color:#333; color:#555;">PRÓXIMAMENTE</a></div></div>
-            <div class="project-card"><div class="leviatham-seal"><div class="seal-inner">???</div></div><div class="card-body"><div class="project-header"><i class="fa-solid fa-code project-icon" style="color:#555;"></i><div><h3 class="project-title">???</h3><span class="project-desc">Confidencial</span></div></div><div class="tech-bio">Proyecto bajo acuerdo de confidencialidad (NDA). Desarrollo de infraestructura en curso.</div><div class="data-grid"><div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Anuncios:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">IA:</span><span class="val-norm">???</span></div></div><a href="#" class="project-btn" style="border-color:#333; color:#555;">PRÓXIMAMENTE</a></div></div>
+            <!-- Tarjeta 4 -->
+            <div class="project-card card-classified">
+                <div class="leviatham-seal"><div class="seal-ring"></div><div class="seal-inner">NDA<br>LOCKED</div></div>
+                <div class="card-body">
+                    <div class="project-header"><i class="fa-solid fa-file-shield project-icon"></i><div><h3 class="project-title">???</h3><span class="project-desc">CONFIDENCIAL</span></div></div>
+                    <div class="tech-bio">Proyecto bajo Acuerdo de Confidencialidad (NDA). Infraestructura Fintech de alto nivel en desarrollo.</div>
+                    <div class="data-grid"><div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Plataforma:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Anuncios:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">IA:</span><span class="val-norm">???</span></div></div>
+                    <a href="#" class="project-btn">ACCESO DENEGADO</a>
+                </div>
+            </div>
+            <!-- Tarjeta 5 -->
+            <div class="project-card card-classified">
+                <div class="leviatham-seal"><div class="seal-ring"></div><div class="seal-inner">NDA<br>LOCKED</div></div>
+                <div class="card-body">
+                    <div class="project-header"><i class="fa-solid fa-file-shield project-icon"></i><div><h3 class="project-title">???</h3><span class="project-desc">CONFIDENCIAL</span></div></div>
+                    <div class="tech-bio">Proyecto bajo Acuerdo de Confidencialidad (NDA). Infraestructura Fintech de alto nivel en desarrollo.</div>
+                    <div class="data-grid"><div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Plataforma:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Anuncios:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">IA:</span><span class="val-norm">???</span></div></div>
+                    <a href="#" class="project-btn">ACCESO DENEGADO</a>
+                </div>
+            </div>
+            <!-- Tarjeta 6 -->
+            <div class="project-card card-classified">
+                <div class="leviatham-seal"><div class="seal-ring"></div><div class="seal-inner">NDA<br>LOCKED</div></div>
+                <div class="card-body">
+                    <div class="project-header"><i class="fa-solid fa-file-shield project-icon"></i><div><h3 class="project-title">???</h3><span class="project-desc">CONFIDENCIAL</span></div></div>
+                    <div class="tech-bio">Proyecto bajo Acuerdo de Confidencialidad (NDA). Infraestructura Fintech de alto nivel en desarrollo.</div>
+                    <div class="data-grid"><div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Plataforma:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Anuncios:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">IA:</span><span class="val-norm">???</span></div></div>
+                    <a href="#" class="project-btn">ACCESO DENEGADO</a>
+                </div>
+            </div>
+            <!-- Tarjeta 7 -->
+            <div class="project-card card-classified">
+                <div class="leviatham-seal"><div class="seal-ring"></div><div class="seal-inner">NDA<br>LOCKED</div></div>
+                <div class="card-body">
+                    <div class="project-header"><i class="fa-solid fa-file-shield project-icon"></i><div><h3 class="project-title">???</h3><span class="project-desc">CONFIDENCIAL</span></div></div>
+                    <div class="tech-bio">Proyecto bajo Acuerdo de Confidencialidad (NDA). Infraestructura Fintech de alto nivel en desarrollo.</div>
+                    <div class="data-grid"><div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Plataforma:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Anuncios:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">IA:</span><span class="val-norm">???</span></div></div>
+                    <a href="#" class="project-btn">ACCESO DENEGADO</a>
+                </div>
+            </div>
+            <!-- Tarjeta 8 -->
+            <div class="project-card card-classified">
+                <div class="leviatham-seal"><div class="seal-ring"></div><div class="seal-inner">NDA<br>LOCKED</div></div>
+                <div class="card-body">
+                    <div class="project-header"><i class="fa-solid fa-file-shield project-icon"></i><div><h3 class="project-title">???</h3><span class="project-desc">CONFIDENCIAL</span></div></div>
+                    <div class="tech-bio">Proyecto bajo Acuerdo de Confidencialidad (NDA). Infraestructura Fintech de alto nivel en desarrollo.</div>
+                    <div class="data-grid"><div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Plataforma:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Anuncios:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">IA:</span><span class="val-norm">???</span></div></div>
+                    <a href="#" class="project-btn">ACCESO DENEGADO</a>
+                </div>
+            </div>
+            <!-- Tarjeta 9 -->
+            <div class="project-card card-classified">
+                <div class="leviatham-seal"><div class="seal-ring"></div><div class="seal-inner">NDA<br>LOCKED</div></div>
+                <div class="card-body">
+                    <div class="project-header"><i class="fa-solid fa-file-shield project-icon"></i><div><h3 class="project-title">???</h3><span class="project-desc">CONFIDENCIAL</span></div></div>
+                    <div class="tech-bio">Proyecto bajo Acuerdo de Confidencialidad (NDA). Infraestructura Fintech de alto nivel en desarrollo.</div>
+                    <div class="data-grid"><div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Plataforma:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Anuncios:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">IA:</span><span class="val-norm">???</span></div></div>
+                    <a href="#" class="project-btn">ACCESO DENEGADO</a>
+                </div>
+            </div>
+            <!-- Tarjeta 10 -->
+            <div class="project-card card-classified">
+                <div class="leviatham-seal"><div class="seal-ring"></div><div class="seal-inner">NDA<br>LOCKED</div></div>
+                <div class="card-body">
+                    <div class="project-header"><i class="fa-solid fa-file-shield project-icon"></i><div><h3 class="project-title">???</h3><span class="project-desc">CONFIDENCIAL</span></div></div>
+                    <div class="tech-bio">Proyecto bajo Acuerdo de Confidencialidad (NDA). Infraestructura Fintech de alto nivel en desarrollo.</div>
+                    <div class="data-grid"><div class="data-row"><span class="data-label">Base de Datos:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Plataforma:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Nº Secciones:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">Anuncios:</span><span class="val-norm">???</span></div><div class="data-row"><span class="data-label">IA:</span><span class="val-norm">???</span></div></div>
+                    <a href="#" class="project-btn">ACCESO DENEGADO</a>
+                </div>
+            </div>
 
         </div>
 
         <div class="workflow-section">
-            <div class="section-header" style="text-align:center; margin-bottom:50px;">
+            <div class="section-header">
                 <h2>METODOLOGÍA DE TRABAJO</h2>
-                <p style="color:#aaa; font-size:0.9rem;">PROTOCOLO DE EJECUCIÓN</p>
+                <p>PROTOCOLO DE EJECUCIÓN</p>
             </div>
 
             <div class="timeline-container">
@@ -338,37 +436,37 @@
 
         <div class="faq-section">
             <div class="faq-header">
-                <h2>PREGUNTAS CLAVES</h2>
+                <h2>PREGUNTAS DEL PORTAFOLIO</h2>
             </div>
             
             <details class="faq-item">
-                <summary>¿El código fuente me pertenece?</summary>
-                <div class="faq-ans">Sí. Al finalizar el pago, transferimos la propiedad intelectual completa del código y las credenciales de acceso.</div>
+                <summary>¿Qué significa el sello "LEVIATHAM CERTIFIED"?</summary>
+                <div class="faq-ans">Es nuestra garantía de calidad. Certifica que el proyecto ha pasado por 50+ pruebas de seguridad, optimización de velocidad y que cumple con los estándares arquitectónicos de la agencia.</div>
             </details>
             
             <details class="faq-item">
-                <summary>¿Firman acuerdos de confidencialidad (NDA)?</summary>
-                <div class="faq-ans">Absolutamente. Para proyectos sensibles, firmamos un NDA antes de escuchar tu idea para garantizar tu seguridad.</div>
+                <summary>¿Por qué hay proyectos ocultos o confidenciales?</summary>
+                <div class="faq-ans">Muchos de nuestros desarrollos son para clientes corporativos que exigen acuerdos de no divulgación (NDA). Protegemos la propiedad intelectual de nuestros socios estratégicos.</div>
             </details>
 
             <details class="faq-item">
-                <summary>¿Qué pasa si necesito escalar la web?</summary>
-                <div class="faq-ans">Nuestra arquitectura es modular. Podemos agregar nuevas funciones o servidores más potentes sin tener que rehacer la web.</div>
+                <summary>¿Puedo verificar los proyectos en vivo?</summary>
+                <div class="faq-ans">Sí. Para los proyectos públicos (como Tarot Astralis o ComicVerse), proporcionamos enlaces de demostración o acceso directo previa solicitud calificada.</div>
             </details>
 
             <details class="faq-item">
-                <summary>¿Ustedes manejan los servidores?</summary>
-                <div class="faq-ans">Podemos hacerlo. Ofrecemos servicios de administración de servidores (DevOps) para que no tengas que preocuparte por la técnica.</div>
+                <summary>¿La infraestructura de estos sitios es escalable?</summary>
+                <div class="faq-ans">Totalmente. Diseñamos arquitectura cloud-native. Si un sitio pasa de 1,000 a 100,000 usuarios, nuestros sistemas auto-escalan los recursos para no colapsar.</div>
             </details>
 
             <details class="faq-item">
-                <summary>¿Cuánto tiempo tarda un desarrollo promedio?</summary>
-                <div class="faq-ans">Depende de la complejidad. Un MVP puede estar en 2 semanas, mientras que una plataforma compleja puede llevar 1 a 2 meses.</div>
+                <summary>¿Desarrollan solo Webs o también Apps?</summary>
+                <div class="faq-ans">Nuestro fuerte son las PWAs (Progressive Web Apps) y Web Apps complejas que funcionan como aplicaciones nativas, pero accesibles desde cualquier navegador sin descarga.</div>
             </details>
         </div>
 
         <div class="copyright">
-            © 2025 LEVIATHAM CORE.
+            © 2026 LEVIATHAM CORE.
         </div>
 
     </div>
@@ -376,10 +474,12 @@
     <script>
         const headerTrigger = document.getElementById('header-trigger');
         const navMenu = document.getElementById('nav-menu');
+        const header = document.querySelector('header');
+        
         headerTrigger.addEventListener('click', (e) => {
             if (!e.target.closest('a')) {
                 navMenu.classList.toggle('active');
-                document.querySelector('header').classList.toggle('open');
+                header.classList.toggle('open');
             }
         });
     </script>
