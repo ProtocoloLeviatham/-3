@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Soporte Técnico | Leviatham Core</title>
+    <title>Soporte General | Leviatham Core</title>
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2881/2881142.png">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
@@ -12,15 +12,21 @@
     <style>
         :root {
             --bg-dark: #020203;
-            --primary: #00f2ea; /* Celeste Neón Principal */
-            --secondary: #7000ff;
-            --gold: #ffd700;
-            --danger: #ff0055;
-            --success: #00ff88;
+            --primary: #00f2ea;     /* Cyan Leviatham */
+            --secondary: #7000ff;   /* Violeta */
+            --critical: #ff003c;    /* Rojo Alerta */
+            --warning: #ffd700;     /* Amarillo Admin */
+            --safe: #0088ff;        /* Azul Ticket */
             --text-main: #ffffff;
             --text-muted: #b0b0b0;
-            --card-bg: rgba(13, 14, 20, 0.98);
+            --card-bg: rgba(13, 14, 20, 0.95);
         }
+
+        /* SCROLLBAR PERSONALIZADA GLOBAL */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
@@ -30,17 +36,8 @@
             color: var(--text-main);
             overflow-x: hidden;
             min-height: 100vh;
-            padding-bottom: 50px;
+            padding-bottom: 80px;
         }
-
-        /* --- SCROLLBAR PERSONALIZADA --- */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #0a0a0a; }
-        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; border: 1px solid #000; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--secondary); }
-
-        .table-wrapper::-webkit-scrollbar { height: 6px; }
-        .table-wrapper::-webkit-scrollbar-thumb { background: linear-gradient(90deg, var(--primary), var(--secondary)); }
 
         /* --- FONDO ANIMADO --- */
         .cyber-background {
@@ -49,274 +46,212 @@
         }
         .cyber-grid {
             position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
-            background-image: linear-gradient(rgba(0, 242, 234, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 234, 0.05) 1px, transparent 1px);
-            background-size: 50px 50px;
+            background-image: linear-gradient(rgba(0, 242, 234, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 234, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
             transform: perspective(500px) rotateX(60deg);
-            animation: gridMove 20s linear infinite; opacity: 0.6;
+            opacity: 0.5;
         }
-        @keyframes gridMove { 0% { transform: perspective(500px) rotateX(60deg) translateY(0); } 100% { transform: perspective(500px) rotateX(60deg) translateY(50px); } }
 
-        h1, h2, h3, h4, .channel-title, .sla-rank { font-family: 'Orbitron', sans-serif; }
+        h1, h2, h3, h4, .orbitron { font-family: 'Orbitron', sans-serif; }
 
-        /* --- HEADER --- */
+        /* --- BOTÓN VOLVER (REEMPLAZO MENU) --- */
         header {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 500px; z-index: 5000; 
-            background: rgba(8, 9, 14, 0.98); backdrop-filter: blur(25px);
-            border: 1px solid rgba(0, 242, 234, 0.3); border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-            display: flex; flex-direction: column; align-items: center; transition: 0.3s ease;
-            padding: 0; 
+            width: 90%; max-width: 400px; z-index: 5000;
+            display: flex; justify-content: center;
         }
-        .header-trigger { 
-            width: 100%; display: flex; flex-direction: column; align-items: center; cursor: pointer; gap: 5px; 
-            padding: 12px 15px; 
-            user-select: none; /* Evita selección de texto al hacer click */
+        .back-btn {
+            background: rgba(8, 9, 14, 0.95); backdrop-filter: blur(10px);
+            border: 1px solid var(--primary); color: #fff;
+            padding: 12px 25px; border-radius: 50px; text-decoration: none;
+            font-family: 'Orbitron'; font-size: 0.9rem; letter-spacing: 1px;
+            display: flex; align-items: center; gap: 10px;
+            box-shadow: 0 0 15px rgba(0, 242, 234, 0.2); transition: 0.3s;
         }
-        .logo { display: flex; align-items: center; gap: 10px; font-size: 1.3rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 10px rgba(0, 242, 234, 0.5); }
-        .logo i { color: var(--primary); font-size: 1.2rem; }
-        .menu-label { font-size: 0.7rem; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; display: flex; align-items: center; gap: 8px; animation: pulseGold 2s infinite; }
-        header.open .menu-arrow { transform: rotate(180deg); transition: transform 0.3s ease; }
+        .back-btn:hover { background: var(--primary); color: #000; box-shadow: 0 0 30px var(--primary); }
+
+        /* --- CONTENEDOR PRINCIPAL --- */
+        .container { width: 100%; max-width: 1100px; margin: 0 auto; padding: 0 20px; margin-top: 100px; }
         
-        nav { width: 100%; max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease; opacity: 0; }
-        nav.active { max-height: 500px; opacity: 1; border-top: 1px solid rgba(255,255,255,0.1); }
-        nav ul { list-style: none; display: flex; flex-direction: column; gap: 8px; width: 100%; padding: 15px; margin: 0; }
-        nav a { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px; color: var(--text-muted); text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: 0.2s; border: 1px solid transparent; }
-        nav a:hover { background: rgba(0, 242, 234, 0.1); color: #fff; border-color: var(--primary); }
-        .cta-menu { background: linear-gradient(135deg, var(--secondary), #4a00e0) !important; color: #fff !important; font-weight: 700 !important; }
-        @keyframes pulseGold { 0% { opacity: 0.8; } 50% { opacity: 1; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); } 100% { opacity: 0.8; } }
+        .page-title { text-align: center; margin-bottom: 60px; position: relative; }
+        .page-title h1 { font-size: 2.2rem; background: linear-gradient(90deg, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 2px; }
+        .page-title::after { content: ''; display: block; width: 100px; height: 3px; background: var(--secondary); margin: 20px auto 0; box-shadow: 0 0 10px var(--secondary); }
+        .page-title p { color: var(--text-muted); font-size: 0.95rem; max-width: 700px; margin: 0 auto; line-height: 1.6; }
 
-        .main-container { width: 100%; padding: 0 15px; display: flex; flex-direction: column; align-items: center; max-width: 1200px; margin: 0 auto; }
-
-        /* --- HERO SOPORTE --- */
-        .hero-support { text-align: center; margin-top: 150px; margin-bottom: 60px; }
-        .hero-support h1 { 
-            font-size: 2.5rem; margin-bottom: 15px; color: #fff; 
-            text-shadow: 0 0 30px rgba(0,242,234,0.6); text-transform: uppercase; letter-spacing: 2px;
+        /* --- SECCIONES COMUNES --- */
+        .section-header { 
+            border-left: 4px solid var(--primary); padding-left: 20px; margin-bottom: 30px; 
+            background: linear-gradient(90deg, rgba(0, 242, 234, 0.05), transparent);
+            padding-top: 10px; padding-bottom: 10px;
         }
-        .hero-support p { color: var(--text-muted); font-size: 1.1rem; max-width: 700px; margin: 0 auto; line-height: 1.6; }
+        .section-header h2 { font-size: 1.6rem; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
+        .section-header p { color: var(--text-muted); font-size: 0.9rem; margin-top: 5px; font-weight: 300; }
 
         /* --- TRIAGE SECTION --- */
-        .triage-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; width: 100%; margin-bottom: 80px; }
+        .triage-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; margin-bottom: 80px; }
         
-        .channel-card {
-            background: rgba(13, 14, 20, 0.9); border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 16px; padding: 35px; transition: all 0.3s ease; position: relative; overflow: hidden;
-            display: flex; flex-direction: column; height: 100%;
-        }
-        .channel-card:hover { transform: translateY(-8px); }
-        
-        /* CANAL ROJO */
-        .ch-red { border-top: 5px solid var(--danger); box-shadow: 0 10px 40px rgba(255, 0, 85, 0.15); background: linear-gradient(180deg, rgba(255,0,85,0.05), rgba(13,14,20,0.95)); }
-        .ch-red:hover { box-shadow: 0 15px 50px rgba(255, 0, 85, 0.3); border-color: var(--danger); }
-        .ch-red .channel-icon { color: var(--danger); animation: pulseDanger 1.5s infinite; filter: drop-shadow(0 0 10px var(--danger)); }
-        .btn-red { 
-            background: var(--danger); color: #fff; width: 100%; padding: 16px; text-align: center; border-radius: 8px; 
-            text-decoration: none; font-weight: 800; margin-top: auto; display: block; text-transform: uppercase; 
-            letter-spacing: 2px; box-shadow: 0 5px 20px rgba(255,0,85,0.4); font-size: 1rem;
-        }
-        
-        /* CANAL AZUL */
-        .ch-blue { border-top: 5px solid var(--primary); box-shadow: 0 10px 40px rgba(0, 242, 234, 0.15); background: linear-gradient(180deg, rgba(0,242,234,0.05), rgba(13,14,20,0.95)); }
-        .ch-blue:hover { box-shadow: 0 15px 50px rgba(0, 242, 234, 0.3); border-color: var(--primary); }
-        .ch-blue .channel-icon { color: var(--primary); filter: drop-shadow(0 0 10px var(--primary)); }
-        .btn-blue { 
-            background: transparent; border: 2px solid var(--primary); color: var(--primary); width: 100%; padding: 14px; 
-            text-align: center; border-radius: 8px; text-decoration: none; font-weight: 800; margin-top: auto; 
-            display: block; text-transform: uppercase; cursor: pointer; transition: 0.3s; font-size: 1rem; letter-spacing: 1px;
-        }
-        .btn-blue:hover { background: var(--primary); color: #000; box-shadow: 0 0 30px var(--primary); }
-
-        /* CANAL AMARILLO */
-        .ch-yellow { border-top: 5px solid var(--gold); box-shadow: 0 10px 40px rgba(255, 215, 0, 0.15); background: linear-gradient(180deg, rgba(255,215,0,0.05), rgba(13,14,20,0.95)); }
-        .ch-yellow:hover { box-shadow: 0 15px 50px rgba(255, 215, 0, 0.3); border-color: var(--gold); }
-        .ch-yellow .channel-icon { color: var(--gold); }
-        .btn-yellow { background: transparent; border: 1px solid var(--gold); color: var(--gold); width: 100%; padding: 14px; text-align: center; border-radius: 8px; text-decoration: none; font-weight: 700; margin-top: auto; display: block; text-transform: uppercase; font-size: 0.9rem; }
-        .btn-yellow:hover { background: var(--gold); color: #000; }
-
-        .channel-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
-        .channel-icon { font-size: 2.2rem; }
-        .channel-title { font-size: 1.4rem; color: #fff; margin: 0; letter-spacing: 1px; }
-        .channel-desc { color: #ccc; font-size: 1rem; line-height: 1.7; margin-bottom: 25px; font-weight: 300; }
-        .channel-cases { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 25px; font-style: italic; border-left: 2px solid rgba(255,255,255,0.1); padding-left: 10px; }
-
-        @keyframes pulseDanger { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(1.05); } 100% { opacity: 1; transform: scale(1); } }
-
-        /* --- SLA SECTION --- */
-        .sla-section { width: 100%; margin-bottom: 80px; }
-        .section-heading { 
-            text-align: center; margin-bottom: 10px; font-size: 1.8rem; color: #fff; 
-            text-transform: uppercase; display: block; letter-spacing: 2px;
-            text-shadow: 0 0 15px rgba(112, 0, 255, 0.5);
-        }
-        .section-sub { text-align: center; color: var(--primary); margin-bottom: 30px; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; }
-        
-        .sla-intro {
-            max-width: 800px; margin: 0 auto 30px; text-align: center; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;
-            background: rgba(112, 0, 255, 0.05); padding: 20px; border-radius: 12px; border: 1px solid rgba(112,0,255,0.2);
+        .triage-card {
+            background: rgba(20, 20, 25, 0.6); backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.05); border-radius: 12px;
+            padding: 30px; position: relative; overflow: hidden; transition: 0.4s;
+            display: flex; flex-direction: column;
         }
 
-        .table-wrapper {
-            overflow-x: auto; background: rgba(10,10,15,0.9); border-radius: 12px; 
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.05);
+        /* Critical Ops (Red) */
+        .card-red { border-top: 4px solid var(--critical); }
+        .card-red:hover { box-shadow: 0 10px 40px rgba(255, 0, 60, 0.15); transform: translateY(-5px); }
+        .card-red .icon-box { color: var(--critical); border: 1px solid rgba(255, 0, 60, 0.3); background: rgba(255, 0, 60, 0.05); }
+        .pulse-dot { position: absolute; top: 20px; right: 20px; width: 12px; height: 12px; background: var(--critical); border-radius: 50%; animation: pulseRed 1s infinite; box-shadow: 0 0 10px var(--critical); }
+        
+        /* Technical (Blue) */
+        .card-blue { border-top: 4px solid var(--safe); }
+        .card-blue:hover { box-shadow: 0 10px 40px rgba(0, 136, 255, 0.15); transform: translateY(-5px); }
+        .card-blue .icon-box { color: var(--safe); border: 1px solid rgba(0, 136, 255, 0.3); background: rgba(0, 136, 255, 0.05); }
+
+        /* Admin (Yellow) */
+        .card-yellow { border-top: 4px solid var(--warning); }
+        .card-yellow:hover { box-shadow: 0 10px 40px rgba(255, 215, 0, 0.15); transform: translateY(-5px); }
+        .card-yellow .icon-box { color: var(--warning); border: 1px solid rgba(255, 215, 0, 0.3); background: rgba(255, 215, 0, 0.05); }
+
+        .icon-box { width: 60px; height: 60px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 20px; }
+        .triage-title { font-size: 1.3rem; color: #fff; margin-bottom: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .triage-subtitle { font-size: 0.75rem; text-transform: uppercase; color: #888; margin-bottom: 15px; display: block; font-weight: 700; letter-spacing: 1px; }
+        .triage-desc { color: #ccc; font-size: 0.9rem; margin-bottom: 25px; line-height: 1.6; flex-grow: 1; }
+        
+        .action-btn { 
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; padding: 15px; border-radius: 6px; font-weight: 700; font-size: 0.9rem; text-decoration: none; text-transform: uppercase; transition: 0.3s; margin-top: auto; font-family: 'Orbitron';
+        }
+        .btn-red { background: linear-gradient(45deg, rgba(255, 0, 60, 0.2), transparent); color: var(--critical); border: 1px solid var(--critical); }
+        .btn-red:hover { background: var(--critical); color: #fff; box-shadow: 0 0 20px var(--critical); }
+        
+        .btn-blue { background: linear-gradient(45deg, rgba(0, 136, 255, 0.2), transparent); color: var(--safe); border: 1px solid var(--safe); }
+        .btn-blue:hover { background: var(--safe); color: #fff; box-shadow: 0 0 20px var(--safe); }
+        
+        .btn-yellow { background: linear-gradient(45deg, rgba(255, 215, 0, 0.2), transparent); color: var(--warning); border: 1px solid var(--warning); }
+        .btn-yellow:hover { background: var(--warning); color: #000; box-shadow: 0 0 20px var(--warning); }
+
+        @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(255, 0, 60, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 0, 60, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 0, 60, 0); } }
+
+        /* --- SLA TABLE & SCROLLBAR --- */
+        .sla-container { margin-bottom: 80px; }
+        .sla-intro { margin-bottom: 20px; color: #ccc; line-height: 1.6; font-size: 0.95rem; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 8px; border-left: 2px solid var(--secondary); }
+        
+        .sla-wrapper { 
+            overflow-x: auto; 
+            background: #08080a; 
+            border-radius: 12px; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            /* Slidebar Personalizada para el contenedor */
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) #08080a;
         }
         
-        .sla-table { width: 100%; border-collapse: collapse; min-width: 600px; }
-        .sla-table th { 
-            background: linear-gradient(90deg, rgba(112,0,255,0.2), rgba(0,242,234,0.1)); 
-            color: var(--primary); padding: 20px; text-align: left; font-family: 'Orbitron'; font-size: 0.9rem; letter-spacing: 1px; border-bottom: 2px solid var(--secondary);
+        /* Webkit Scrollbar para la tabla */
+        .sla-wrapper::-webkit-scrollbar { height: 6px; }
+        .sla-wrapper::-webkit-scrollbar-track { background: #08080a; }
+        .sla-wrapper::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
+
+        table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        th, td { padding: 20px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        th { 
+            background: linear-gradient(180deg, rgba(0, 242, 234, 0.05), rgba(0,0,0,0)); 
+            color: var(--primary); 
+            font-family: 'Orbitron'; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;
+            border-bottom: 2px solid rgba(0, 242, 234, 0.2);
         }
-        .sla-table td { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #ccc; font-size: 0.95rem; }
-        .sla-table tr:hover { background: rgba(255,255,255,0.02); }
-        .sla-rank { font-weight: 800; font-size: 1rem; }
-        .rank-p1 { color: var(--danger); text-shadow: 0 0 10px rgba(255,0,85,0.4); }
-        .rank-p2 { color: #ff9100; }
-        .rank-p3 { color: var(--primary); }
-        .rank-p4 { color: var(--text-muted); }
+        td { font-size: 0.95rem; color: #ddd; vertical-align: middle; }
+        .priority-badge { padding: 6px 12px; border-radius: 4px; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; display: inline-block; min-width: 50px; text-align: center; }
+        .p1 { background: rgba(255, 0, 60, 0.1); color: var(--critical); border: 1px solid var(--critical); box-shadow: 0 0 10px rgba(255, 0, 60, 0.2); }
+        .p2 { background: rgba(255, 140, 0, 0.1); color: #ff8c00; border: 1px solid #ff8c00; }
+        .p3 { background: rgba(0, 136, 255, 0.1); color: var(--safe); border: 1px solid var(--safe); }
+        .p4 { background: rgba(176, 176, 176, 0.1); color: #bbb; border: 1px solid #bbb; }
 
         /* --- HORARIOS --- */
         .hours-box { 
-            background: linear-gradient(135deg, rgba(0, 242, 234, 0.05), rgba(0,0,0,0.8)); 
-            border: 1px solid var(--primary); border-radius: 12px; padding: 25px; 
-            text-align: center; margin-bottom: 80px; width: 100%; box-shadow: 0 0 30px rgba(0,242,234,0.1);
-        }
-        .hours-title { color: #fff; font-size: 1.2rem; margin-bottom: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
-        .hours-text { color: var(--text-main); font-size: 1rem; }
-        .guard-text { color: var(--gold); font-size: 0.9rem; margin-top: 15px; display: block; font-weight: 700; text-shadow: 0 0 10px rgba(255,215,0,0.3); }
-
-        /* --- FORMULARIO TICKET --- */
-        .ticket-form-section { 
-            width: 100%; max-width: 700px; margin-bottom: 80px; padding: 40px; 
-            background: linear-gradient(145deg, #0e0e12, #050505); 
-            border-radius: 20px; border: 1px solid rgba(0, 242, 234, 0.2); 
-            box-shadow: 0 20px 60px rgba(0,0,0,0.8); position: relative;
-        }
-        
-        .form-intro {
-            background: rgba(0, 242, 234, 0.05); padding: 15px; border-left: 3px solid var(--primary);
-            margin-bottom: 25px; font-size: 0.85rem; color: #ccc; line-height: 1.5;
-        }
-
-        .admin-trigger-icon {
-            color: var(--text-muted); cursor: pointer; transition: 0.3s;
-            font-size: 1.2rem; margin-left: 15px; vertical-align: middle; opacity: 0.3;
-        }
-        .admin-trigger-icon:hover { color: var(--primary); opacity: 1; text-shadow: 0 0 10px var(--primary); }
-
-        .form-group { margin-bottom: 25px; }
-        .form-label { display: block; color: var(--primary); margin-bottom: 10px; font-size: 0.9rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
-        .form-input, .form-textarea, .form-select { 
-            width: 100%; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); 
-            border-radius: 8px; color: #fff; font-family: 'Inter'; font-size: 1rem; outline: none; transition: 0.3s;
-        }
-        .form-input:focus, .form-textarea:focus, .form-select:focus { 
-            border-color: var(--primary); box-shadow: 0 0 15px rgba(0, 242, 234, 0.15); background: rgba(0, 242, 234, 0.02);
-        }
-        .form-select option { background: #000; color: #fff; }
-        .form-textarea { height: 150px; resize: vertical; }
-        
-        .readonly-input {
-            background: rgba(0,0,0,0.3); color: #777; border-color: transparent; cursor: not-allowed; font-family: monospace;
-        }
-
-        .checkbox-container { display: flex; align-items: flex-start; gap: 10px; font-size: 0.8rem; color: #aaa; margin-bottom: 25px; }
-        .checkbox-input { margin-top: 3px; accent-color: var(--primary); }
-
-        .btn-submit { 
-            width: 100%; padding: 18px; background: linear-gradient(90deg, var(--secondary), var(--primary)); 
-            border: none; border-radius: 8px; color: #000; font-weight: 800; font-family: 'Orbitron'; 
-            cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; font-size: 1rem;
-        }
-        .btn-submit:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(0, 242, 234, 0.5); color: #fff; }
-
-        /* --- BUG BOUNTY --- */
-        .bounty-section { 
-            background: linear-gradient(45deg, rgba(255, 0, 85, 0.1), rgba(0,0,0,0)); 
-            border: 1px dashed var(--danger); padding: 25px; border-radius: 12px; text-align: center; width: 100%; margin-bottom: 50px;
-        }
-        .bounty-title { color: var(--danger); font-size: 1.2rem; margin-bottom: 5px; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; }
-        .bounty-text { color: #ccc; font-size: 0.95rem; }
-
-        /* --- LEGAL TERMS FOOTER --- */
-        .legal-terminal {
-            width: 100%; max-width: 900px; margin: 0 auto 50px;
-            background: #000; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px;
-            padding: 20px; font-family: 'Courier New', monospace;
-            position: relative; overflow: hidden;
-        }
-        .legal-terminal::before {
-            content: "TERMINAL_LEGAL_V2.4 :: READ_ONLY";
-            display: block; color: var(--secondary); font-size: 0.7rem; border-bottom: 1px solid #333;
-            padding-bottom: 10px; margin-bottom: 15px; letter-spacing: 1px;
-        }
-        .terms-content {
-            font-size: 0.75rem; color: #666; text-align: justify; line-height: 1.6;
-            max-height: 200px; overflow-y: auto; padding-right: 10px;
-        }
-        .terms-content strong { color: #888; }
-        
-        /* --- SIGNATURE 33 --- */
-        .footer-signature {
-            width: 100%; text-align: center; margin-top: 50px; padding: 40px 0;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            display: grid; grid-template-columns: 1fr 1fr; gap: 30px; 
+            background: linear-gradient(145deg, rgba(255,255,255,0.03), #000);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 40px; margin-bottom: 80px;
             position: relative;
         }
-        .signature-3d {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: #111;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            transform: skew(-15deg) rotate(-5deg);
-            display: inline-block;
-            text-shadow: 
-                2px 2px 0px var(--primary),
-                4px 4px 0px var(--secondary),
-                0 0 20px rgba(0, 242, 234, 0.5);
-            transition: all 0.5s ease;
-            cursor: help;
+        .hour-col h3 { font-size: 1.3rem; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; letter-spacing: 1px; }
+        .hour-col ul { list-style: none; color: var(--text-muted); font-size: 0.95rem; line-height: 1.8; padding-left: 5px; }
+        .hour-col li { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+        .dot-green { background: #00ff88; box-shadow: 0 0 10px #00ff88; animation: blink 2s infinite; }
+        .dot-yellow { background: var(--warning); }
+        .guard-alert { color: var(--critical); font-size: 0.8rem; font-weight: 700; margin-top: 15px; display: block; border: 1px dashed var(--critical); padding: 10px; border-radius: 6px; text-align: center; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        @media (max-width: 768px) { .hours-box { grid-template-columns: 1fr; } }
+
+        /* --- TICKET FORM --- */
+        .ticket-intro { margin-bottom: 25px; color: #ccc; font-size: 1rem; line-height: 1.6; max-width: 800px; }
+        .ticket-intro strong { color: var(--primary); }
+
+        .ticket-panel {
+            background: rgba(10, 10, 15, 0.8); border: 1px solid var(--primary);
+            border-radius: 12px; padding: 40px; position: relative; overflow: hidden;
+            box-shadow: 0 0 40px rgba(0, 242, 234, 0.05); margin-bottom: 80px;
         }
-        .signature-3d:hover {
-            transform: skew(0deg) rotate(0deg) scale(1.1);
-            color: #fff;
-            text-shadow: 0 0 30px var(--primary);
+        .ticket-panel::before { content: 'SYSTEM: READY'; position: absolute; top: 15px; right: 20px; font-family: 'Orbitron'; font-size: 0.7rem; color: var(--primary); opacity: 0.7; letter-spacing: 2px; }
+        
+        .form-grid { display: grid; gap: 20px; }
+        .input-group label { display: block; color: var(--primary); font-size: 0.85rem; margin-bottom: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .input-dark {
+            width: 100%; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.15);
+            color: #fff; padding: 15px; border-radius: 6px; font-family: 'Inter'; transition: 0.3s; font-size: 1rem;
         }
-        .signature-sub {
-            display: block; margin-top: 15px; font-size: 0.7rem; color: #333; letter-spacing: 2px;
+        .input-dark:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 15px rgba(0, 242, 234, 0.15); background: rgba(0, 242, 234, 0.02); }
+        select.input-dark option { background: #000; color: #fff; padding: 10px; }
+        
+        .submit-btn {
+            background: var(--primary); color: #000; border: none; padding: 18px; border-radius: 6px;
+            font-weight: 900; font-family: 'Orbitron'; text-transform: uppercase; cursor: pointer;
+            transition: 0.3s; margin-top: 15px; letter-spacing: 2px; font-size: 1rem;
+        }
+        .submit-btn:hover { background: #fff; box-shadow: 0 0 30px var(--primary); transform: translateY(-3px); }
+
+        /* --- BUG BOUNTY --- */
+        .bounty-section {
+            background: linear-gradient(90deg, rgba(112, 0, 255, 0.1), rgba(0, 0, 0, 0));
+            border-left: 4px solid var(--secondary); padding: 30px; border-radius: 8px; margin-bottom: 60px;
+            display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+        .bounty-text h3 { color: var(--secondary); text-transform: uppercase; font-size: 1.2rem; margin-bottom: 10px; letter-spacing: 1px; }
+        .bounty-text p { color: #ccc; font-size: 0.95rem; line-height: 1.5; }
+        .bounty-badge {
+            background: var(--secondary); color: #fff; padding: 10px 20px; border-radius: 50px;
+            font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 0 0 20px rgba(112, 0, 255, 0.4); animation: pulseGold 3s infinite;
         }
 
-        /* --- ADMIN MODAL --- */
-        .admin-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98);
-            z-index: 10000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(20px);
+        /* --- TERMS & FOOTER --- */
+        .terms-box { 
+            font-size: 0.85rem; color: #888; padding: 30px; 
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+            background: rgba(0,0,0,0.4); margin-top: 60px;
         }
-        .admin-content {
-            background: #0a0a0a; border: 1px solid var(--primary); padding: 40px; border-radius: 16px;
-            width: 90%; max-width: 900px; max-height: 90vh; overflow-y: auto; position: relative;
-            box-shadow: 0 0 50px rgba(0, 242, 234, 0.1);
+        .terms-box h4 { color: #fff; margin-bottom: 15px; text-transform: uppercase; font-family: 'Orbitron'; letter-spacing: 1px; }
+        .terms-box ul { padding-left: 20px; line-height: 1.8; }
+        .terms-box li { margin-bottom: 10px; }
+
+        .signature-3d {
+            text-align: center; margin-top: 80px; margin-bottom: 30px;
+            font-family: 'Orbitron'; font-weight: 900; font-size: 2.5rem; /* Agrandada */
+            color: rgba(255,255,255,0.15); text-transform: uppercase; letter-spacing: 5px;
+            transform: rotate(-3deg); border: 4px double rgba(255,255,255,0.15);
+            display: inline-block; padding: 15px 50px; border-radius: 15px;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.5), -1px -1px 0 rgba(255,255,255,0.05);
+            mask-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/8399/grunge.png');
+            -webkit-mask-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/8399/grunge.png');
+            animation: stampAnim 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            pointer-events: none;
         }
-        .close-admin { position: absolute; top: 20px; right: 20px; color: #fff; cursor: pointer; font-size: 1.5rem; transition: 0.3s; }
-        .close-admin:hover { color: var(--danger); }
-        .admin-login { text-align: center; max-width: 400px; margin: 0 auto; }
-        .admin-tickets { display: none; }
-        
-        .ticket-item { 
-            background: rgba(255,255,255,0.02); padding: 20px; margin-bottom: 15px; border-radius: 8px; 
-            border-left: 4px solid var(--secondary); transition: 0.2s; word-wrap: break-word; 
-        }
-        .ticket-item:hover { background: rgba(255,255,255,0.04); }
-        .ticket-meta { 
-            font-size: 0.8rem; color: #666; margin-bottom: 10px; display: flex; justify-content: space-between; 
-            border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px;
-        }
-        .ticket-reason { font-weight: 800; color: var(--primary); font-size: 1.1rem; margin-bottom: 10px; display: block; font-family: 'Orbitron'; }
-        .ticket-body { font-size: 0.95rem; color: #ddd; line-height: 1.6; white-space: pre-wrap; margin-bottom: 15px; }
-        .ticket-link { 
-            color: var(--gold); font-size: 0.85rem; display: inline-block; padding: 5px 10px; 
-            border: 1px solid var(--gold); border-radius: 4px; text-decoration: none; margin-top: 5px;
-        }
-        .ticket-link:hover { background: var(--gold); color: #000; }
+        .sig-container { width: 100%; display: flex; justify-content: center; }
+
+        @keyframes stampAnim { 0% { opacity: 0; transform: scale(3) rotate(10deg); } 100% { opacity: 1; transform: scale(1) rotate(-3deg); } }
 
     </style>
 </head>
@@ -325,113 +260,110 @@
     <div class="cyber-background"><div class="cyber-grid"></div></div>
 
     <header>
-        <div class="header-trigger" id="header-trigger-btn">
-            <div class="logo"><i class="fa-solid fa-layer-group"></i><span class="logo-text">Leviatham</span></div>
-            <div class="menu-label">MENÚ PRINCIPAL [ TOCAR ] <i class="fa-solid fa-chevron-down menu-arrow"></i></div>
-        </div>
-        <nav id="nav-menu">
-            <ul>
-                <li><a href="index.html"><i class="fa-solid fa-house-signal"></i> Inicio</a></li>
-                <li><a href="desarrollo.html"><i class="fa-solid fa-laptop-code"></i> Desarrollo</a></li>
-                <li><a href="tienda.html"><i class="fa-solid fa-cart-shopping"></i> Tienda</a></li>
-                <li><a href="portafolio.html"><i class="fa-solid fa-eye"></i> Portafolio</a></li>
-                <li><a href="infraestructura.html"><i class="fa-solid fa-network-wired"></i> Infraestructura</a></li>
-                <li><a href="soportegeneral.html" style="color:var(--primary); border-color:var(--primary);"><i class="fa-solid fa-headset"></i> Soporte</a></li>
-                <li><a href="cotizador.html" class="cta-menu"><i class="fa-solid fa-bolt"></i> Cotizar</a></li>
-            </ul>
-        </nav>
+        <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> VOLVER A INICIO</a>
     </header>
 
-    <div class="main-container">
+    <div class="container">
+        
+        <div class="page-title">
+            <h1>Centro de Operaciones y Soporte</h1>
+            <p>Plataforma centralizada para la gestión de incidentes y mantenimiento técnico. Utilice el sistema de Triage para garantizar la asignación correcta de recursos según la criticidad del evento.</p>
+        </div>
 
-        <div class="hero-support">
-            <h1>Centro de Comando</h1>
-            <p>Sistema de triaje y resolución de incidencias. Selecciona el canal adecuado para obtener la respuesta más rápida.</p>
+        <div class="section-header">
+            <h2><i class="fa-solid fa-filter" style="color:var(--primary); margin-right:10px;"></i> Protocolo Triage</h2>
+            <p>Seleccione el canal adecuado. Clasificar incorrectamente un incidente puede retrasar su resolución.</p>
         </div>
 
         <div class="triage-grid">
-            <div class="channel-card ch-red">
-                <div class="channel-header">
-                    <i class="fa-solid fa-biohazard channel-icon"></i>
-                    <h3 class="channel-title">CRITICAL OPS</h3>
-                </div>
-                <p class="channel-desc">Uso exclusivo para emergencias absolutas que detienen la facturación o comprometen la seguridad de los datos en tiempo real.</p>
-                <div class="channel-cases">
-                    <strong>CASOS:</strong> Web caída (Error 500), Hackeo activo, Ataque DDoS, Checkout/Pagos rotos.
-                </div>
-                <a href="https://wa.me/1234567890?text=EMERGENCIA%20CRITICA%20-%20SITIO%20CAIDO" class="btn-red">
-                    <i class="fa-solid fa-bell"></i> S.O.S WHATSAPP
-                </a>
+            <div class="triage-card card-red">
+                <div class="pulse-dot"></div>
+                <div class="icon-box"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                <div class="triage-title">CANAL ROJO: CRITICAL OPS</div>
+                <span class="triage-subtitle">EMERGENCIAS DE INFRAESTRUCTURA</span>
+                <p class="triage-desc">
+                    Uso exclusivo para eventos que detienen la operatividad del negocio:<br><br>
+                    • <strong>Error 500 / Sitio Offline.</strong><br>
+                    • <strong>Detección de Intrusión (Hackeo) activo.</strong><br>
+                    • <strong>Falla total en Pasarela de Pagos.</strong><br>
+                    • <strong>Ataque DDoS confirmado.</strong>
+                </p>
+                <a href="https://wa.me/1234567890?text=EMERGENCIA%20CRITICA%20SITIO%20CAIDO" class="action-btn btn-red"><i class="fa-brands fa-whatsapp"></i> ACTIVAR GUARDIA 24/7</a>
             </div>
 
-            <div class="channel-card ch-blue">
-                <div class="channel-header">
-                    <i class="fa-solid fa-microchip channel-icon"></i>
-                    <h3 class="channel-title">TECHNICAL TICKET</h3>
-                </div>
-                <p class="channel-desc">Soporte estándar para errores no críticos, ajustes visuales y consultas técnicas de funcionamiento del sistema.</p>
-                <div class="channel-cases">
-                    <strong>CASOS:</strong> Bugs visuales, textos erróneos, configuración de correos, dudas CMS.
-                </div>
-                <button id="btnCreateTicket" class="btn-blue">
-                    <i class="fa-solid fa-code-branch"></i> CREAR TICKET
-                </button>
+            <div class="triage-card card-blue">
+                <div class="icon-box"><i class="fa-solid fa-microchip"></i></div>
+                <div class="triage-title">CANAL AZUL: TECHNICAL TICKET</div>
+                <span class="triage-subtitle">MANTENIMIENTO Y SOPORTE</span>
+                <p class="triage-desc">
+                    Para incidencias que no comprometen la seguridad inmediata:<br><br>
+                    • <strong>Bugs visuales o de diseño (CSS).</strong><br>
+                    • <strong>Errores de contenido (Typos/Imágenes).</strong><br>
+                    • <strong>Configuración de correos corporativos.</strong><br>
+                    • <strong>Dudas sobre uso del Panel Admin.</strong>
+                </p>
+                <a href="#ticket-form" class="action-btn btn-blue"><i class="fa-solid fa-ticket"></i> ABRIR TICKET TÉCNICO</a>
             </div>
 
-            <div class="channel-card ch-yellow">
-                <div class="channel-header">
-                    <i class="fa-solid fa-file-signature channel-icon"></i>
-                    <h3 class="channel-title">BILLING & SALES</h3>
-                </div>
-                <p class="channel-desc">Gestión administrativa, pagos, facturación y contratación de nuevas funciones o ampliación de servidores.</p>
-                <div class="channel-cases">
-                    <strong>CASOS:</strong> Facturas, métodos de pago, cotización de módulos extra.
-                </div>
-                <a href="mailto:admin@leviatham.core" class="btn-yellow">
-                    <i class="fa-solid fa-briefcase"></i> CONTACTAR ADMIN
-                </a>
+            <div class="triage-card card-yellow">
+                <div class="icon-box"><i class="fa-solid fa-briefcase"></i></div>
+                <div class="triage-title">CANAL AMARILLO: BILLING</div>
+                <span class="triage-subtitle">ADMINISTRACIÓN Y VENTAS</span>
+                <p class="triage-desc">
+                    Gestión comercial y administrativa del proyecto:<br><br>
+                    • <strong>Solicitud de Facturas / Recibos.</strong><br>
+                    • <strong>Reportar pagos o transferencias.</strong><br>
+                    • <strong>Cotización de nuevos módulos o upgrades.</strong><br>
+                    • <strong>Renovación de Dominios/Hosting.</strong>
+                </p>
+                <a href="mailto:admin@leviathamcore.com" class="action-btn btn-yellow"><i class="fa-solid fa-envelope"></i> CONTACTAR ADMIN</a>
             </div>
         </div>
 
-        <div class="sla-section">
-            <div style="text-align:center;">
-                <h2 class="section-heading">MATRIZ SLA</h2>
-                <p class="section-sub">TIEMPOS DE RESPUESTA GARANTIZADOS</p>
-            </div>
-            
+        <div class="section-header">
+            <h2><i class="fa-solid fa-stopwatch" style="color:var(--primary); margin-right:10px;"></i> Matriz de SLA (Nivel de Servicio)</h2>
+            <p>Compromiso contractual de tiempos de respuesta según la severidad del impacto en el negocio.</p>
+        </div>
+
+        <div class="sla-container">
             <div class="sla-intro">
-                Esta tabla define las prioridades de atención. Evita conflictos entendiendo qué constituye una emergencia real versus una solicitud estándar. Los tiempos indicados son máximos; solemos responder antes.
+                <strong>IMPORTANTE:</strong> El SLA define el tiempo máximo para la <em>primera respuesta y diagnóstico</em>, no necesariamente la resolución final, la cual depende de la complejidad técnica. Las incidencias reportadas fuera de horario hábil (P3/P4) se procesan al siguiente día laborable.
             </div>
 
-            <div class="table-wrapper">
-                <table class="sla-table">
+            <div class="sla-wrapper">
+                <table>
                     <thead>
                         <tr>
-                            <th>PRIORIDAD</th>
-                            <th>DEFINICIÓN TÉCNICA</th>
-                            <th>RESPUESTA MÁXIMA</th>
+                            <th>Nivel</th>
+                            <th>Clasificación</th>
+                            <th>Definición de Impacto</th>
+                            <th>Tiempo de Respuesta</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="sla-rank rank-p1">P1 (CRÍTICA)</td>
-                            <td>Sitio totalmente inaccesible o pérdida de datos.</td>
-                            <td>&lt; 1 HORA</td>
+                            <td><span class="priority-badge p1">P1</span></td>
+                            <td style="color:var(--critical); font-weight:700;">CRÍTICA</td>
+                            <td>Parada total del servicio. Pérdida de datos o facturación detenida.</td>
+                            <td><strong>&lt; 1 Hora</strong> (24/7)</td>
                         </tr>
                         <tr>
-                            <td class="sla-rank rank-p2">P2 (ALTA)</td>
-                            <td>Funciones clave rotas (Carrito, Login) pero sitio visible.</td>
-                            <td>&lt; 4 HORAS</td>
+                            <td><span class="priority-badge p2">P2</span></td>
+                            <td style="color:#ff8c00; font-weight:700;">ALTA</td>
+                            <td>Funcionalidad parcial rota (ej: Carrito falla, Formulario roto).</td>
+                            <td><strong>&lt; 4 Horas</strong></td>
                         </tr>
                         <tr>
-                            <td class="sla-rank rank-p3">P3 (NORMAL)</td>
-                            <td>Cambios visuales, contenido, bugs menores.</td>
-                            <td>24 HORAS</td>
+                            <td><span class="priority-badge p3">P3</span></td>
+                            <td style="color:var(--safe); font-weight:700;">NORMAL</td>
+                            <td>Incidencias menores, visuales o de contenido que no impiden operar.</td>
+                            <td><strong>24 Horas Hábiles</strong></td>
                         </tr>
                         <tr>
-                            <td class="sla-rank rank-p4">P4 (BAJA)</td>
-                            <td>Consultas generales, dudas, capacitación.</td>
-                            <td>48 HORAS</td>
+                            <td><span class="priority-badge p4">P4</span></td>
+                            <td style="color:#bbb; font-weight:700;">BAJA</td>
+                            <td>Consultas generales, asesoría, cambios estéticos solicitados.</td>
+                            <td><strong>48 Horas Hábiles</strong></td>
                         </tr>
                     </tbody>
                 </table>
@@ -439,349 +371,95 @@
         </div>
 
         <div class="hours-box">
-            <h3 class="hours-title">HORARIOS OPERATIVOS (HQ)</h3>
-            <p class="hours-text">Lunes a Viernes: 09:00 AM - 06:00 PM (GMT-3)</p>
-            <span class="guard-text"><i class="fa-solid fa-shield-cat"></i> GUARDIA PASIVA ACTIVA 24/7 (Solo Clientes con Plan SLA)</span>
+            <div class="hour-col">
+                <h3 style="color:#fff;"><i class="fa-solid fa-building-user" style="color:var(--primary);"></i> HORARIO OPERATIVO</h3>
+                <ul>
+                    <li><strong>Días Hábiles:</strong> Lunes a Viernes</li>
+                    <li><strong>Franja Horaria:</strong> 09:00 AM - 18:00 PM (GMT-3)</li>
+                    <li><strong>Alcance:</strong> Atención de Tickets P2, P3 y P4. Desarrollo de nuevas funcionalidades y mantenimiento preventivo.</li>
+                </ul>
+            </div>
+            <div class="hour-col" style="border-left: 1px solid rgba(255,255,255,0.1); padding-left: 20px;">
+                <h3 style="color:var(--critical);"><i class="fa-solid fa-tower-broadcast"></i> GUARDIA PASIVA (SLA)</h3>
+                <ul>
+                    <li><strong>Cobertura:</strong> Sábados, Domingos y Feriados.</li>
+                    <li><strong>Alcance Exclusivo:</strong> <span class="status-dot dot-green"></span> Incidentes P1 (Sitio Offline).</li>
+                    <li><strong>Condición:</strong> Requiere Plan de Mantenimiento Activo.</li>
+                </ul>
+                <span class="guard-alert"><i class="fa-solid fa-triangle-exclamation"></i> Las intervenciones P2-P4 solicitadas durante la guardia se facturan como Hora de Urgencia Técnica.</span>
+            </div>
         </div>
 
-        <div class="ticket-form-section" id="ticketFormSection">
-            <div style="display:flex; justify-content:center; align-items:center; margin-bottom:20px;">
-                <h2 style="color:#fff; font-family:'Orbitron'; margin:0; text-transform:uppercase;">Sistema de Incidencias</h2>
-                <i class="fa-solid fa-shield-halved admin-trigger-icon" id="secretAdminTrigger" title="Secure Area"></i>
-            </div>
-            
-            <div class="form-intro">
-                <strong><i class="fa-solid fa-triangle-exclamation"></i> PROTOCOLO DE INGRESO:</strong> Complete todos los campos con precisión técnica. Los tickets con información insuficiente serán rechazados automáticamente por el sistema.
-                <br><em>* Los tickets marcados erróneamente como "Urgencia" penalizan su ranking de cliente.</em>
-            </div>
+        <div class="section-header" id="ticket-form">
+            <h2><i class="fa-solid fa-file-signature" style="color:var(--primary); margin-right:10px;"></i> Generar Ticket Técnico</h2>
+            <p>Sistema de gestión de incidencias. La precisión en el reporte acelera el diagnóstico.</p>
+        </div>
 
-            <form id="supportForm">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div class="form-group">
-                        <label class="form-label">TIPO DE SOLICITUD</label>
-                        <select class="form-select" id="ticketType" required>
-                            <option value="Bug">Reportar Bug / Fallo</option>
-                            <option value="Duda">Duda Técnica</option>
-                            <option value="Contenido">Cambio de Contenido</option>
-                            <option value="Hosting">Problema de Servidor</option>
-                            <option value="Urgencia">S.O.S (Impacto Alto)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">PRIORIDAD AUTO-PERCIBIDA</label>
-                        <select class="form-select" id="ticketPriority">
-                            <option value="Baja">Baja (Puede esperar)</option>
-                            <option value="Media" selected>Media (Normal)</option>
-                            <option value="Alta">Alta (Afecta ventas)</option>
-                        </select>
-                    </div>
+        <div class="ticket-panel">
+            <p class="ticket-intro">
+                Para una resolución eficiente, por favor provea: <strong>Pasos para replicar el error</strong>, <strong>Dispositivo utilizado</strong> (Móvil/PC) y <strong>Navegador</strong>. Si el problema es visual, el equipo agradecerá enlaces a capturas de pantalla alojadas en la nube.
+            </p>
+
+            <form action="https://formsubmit.co/AgenciaLeviatham@gmail.com" method="POST" class="form-grid">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_subject" value="NUEVO TICKET TÉCNICO - LEVIATHAM CORE">
+                <input type="hidden" name="_next" value="https://tupaginaweb.com/gracias.html"> 
+
+                <div class="input-group">
+                    <label><i class="fa-solid fa-user"></i> Identificación del Proyecto</label>
+                    <input type="text" name="cliente" class="input-dark" placeholder="Ej: Proyecto Gastro - Juan Pérez" required>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">DESCRIPCIÓN TÉCNICA DEL PROBLEMA</label>
-                    <textarea class="form-textarea" id="ticketMsg" placeholder="1. Qué estabas haciendo&#10;2. Qué esperabas que pasara&#10;3. Qué pasó realmente..." required></textarea>
+                <div class="input-group">
+                    <label><i class="fa-solid fa-at"></i> Email de Contacto</label>
+                    <input type="email" name="email" class="input-dark" placeholder="contacto@tudominio.com" required>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">DATOS DE CONTACTO</label>
-                    <input type="text" class="form-input" id="ticketContact" placeholder="Email o WhatsApp (con código de área)" required>
+                <div class="input-group">
+                    <label><i class="fa-solid fa-list-check"></i> Categoría del Incidente</label>
+                    <select name="motivo" class="input-dark" required>
+                        <option value="" disabled selected>Seleccione la naturaleza del problema...</option>
+                        <option value="BUG_VISUAL">[P3] Bug Visual / CSS / Diseño</option>
+                        <option value="FUNCIONALIDAD">[P2] Error de Funcionalidad (Forms, Links)</option>
+                        <option value="CONFIG_EMAIL">[P3] Configuración de Correos / DNS</option>
+                        <option value="CONTENIDO">[P4] Solicitud de Cambio de Texto/Imágenes</option>
+                        <option value="CRITICO">[P1] REPORTE DE CAÍDA (Usar WhatsApp preferentemente)</option>
+                        <option value="ADMINISTRACION">Consulta Administrativa / Pagos</option>
+                    </select>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">ENLACE AFECTADO (URL)</label>
-                    <input type="url" class="form-input" id="ticketLink" placeholder="https://tunsitio.com/pagina-error" required>
+                <div class="input-group">
+                    <label><i class="fa-solid fa-align-left"></i> Descripción Técnica Detallada</label>
+                    <textarea name="mensaje" rows="6" class="input-dark" placeholder="1. Qué estaba haciendo cuando ocurrió el error.&#10;2. Qué mensaje de error apareció (si hubo).&#10;3. Desde qué dispositivo accede." required></textarea>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">TU ENTORNO (DETECTADO AUTOMÁTICAMENTE)</label>
-                    <input type="text" class="form-input readonly-input" id="userAgentField" readonly>
-                </div>
-
-                <div class="checkbox-container">
-                    <input type="checkbox" class="checkbox-input" required>
-                    <span><strong>CONFIRMACIÓN DE CARGO:</strong> Entiendo que si el error reportado es causado por manipulación externa, plugins no autorizados o error humano del cliente, se generará una factura por hora técnica según el tarifario vigente.</span>
-                </div>
-
-                <button type="submit" class="btn-submit">ENVIAR A LA MATRIZ</button>
+                <button type="submit" class="submit-btn">ENVIAR REPORTE A INGENIERÍA <i class="fa-solid fa-paper-plane"></i></button>
             </form>
         </div>
 
         <div class="bounty-section">
-            <h4 class="bounty-title"><i class="fa-solid fa-bug"></i> BUG BOUNTY PROGRAM</h4>
-            <p class="bounty-text">¿Encontraste un error en nuestra propia infraestructura? Reportalo y gana descuentos en tu próximo mes de mantenimiento.</p>
-        </div>
-
-        <div class="legal-terminal">
-            <div class="terms-content">
-                <strong>1. OBJETO Y ALCANCE</strong><br>
-                El presente acuerdo de nivel de servicio (SLA) regula la prestación de soporte técnico por parte de Leviatham Core. El servicio se limita estrictamente al mantenimiento de la infraestructura y código provisto originalmente. Modificaciones de terceros anulan automáticamente la garantía.<br><br>
-                
-                <strong>2. EXCLUSIONES DE RESPONSABILIDAD</strong><br>
-                Leviatham Core no será responsable por lucro cesante, pérdida de oportunidades comerciales o daños indirectos derivados de interrupciones del servicio, fallos de proveedores externos (Google, AWS, hosting) o ataques cibernéticos de fuerza mayor.<br><br>
-
-                <strong>3. TIEMPOS DE RESPUESTA VS. RESOLUCIÓN</strong><br>
-                Los tiempos indicados en la tabla SLA refieren al tiempo máximo para el *inicio del diagnóstico*. La resolución final dependerá de la complejidad del incidente. Las solicitudes enviadas fuera de horario comercial serán procesadas al siguiente día hábil, salvo clientes con plan "Elite Guard".<br><br>
-
-                <strong>4. PROPIEDAD INTELECTUAL</strong><br>
-                Todo código desarrollado para la solución de bugs permanece como propiedad intelectual de Leviatham Core hasta la cancelación total de las facturas pendientes.<br><br>
-                
-                <strong>5. JURISDICCIÓN</strong><br>
-                Cualquier disputa legal se someterá a los tribunales arbitrales designados por Leviatham Core en la jurisdicción correspondiente.
+            <div class="bounty-text">
+                <h3><i class="fa-solid fa-shield-cat"></i> PROGRAMA BUG HUNTER</h3>
+                <p>En Leviatham Core recompensamos la seguridad proactiva. Si encuentras una vulnerabilidad crítica o un error lógico en nuestras arquitecturas, repórtalo éticamente. Ofrecemos descuentos en renovaciones o módulos bonificados por reportes validados.</p>
             </div>
+            <div class="bounty-badge">RECOMPENSA ACTIVA</div>
         </div>
-        
-        <div class="footer-signature">
+
+        <div class="terms-box">
+            <h4><i class="fa-solid fa-scale-balanced"></i> Términos y Condiciones del Servicio de Soporte</h4>
+            <ul>
+                <li><strong>1. Uso Responsable del Canal Rojo:</strong> El uso del canal de emergencia para incidencias menores (P3/P4) o consultas administrativas conllevará una penalización automática o cargo por "Falsa Alarma" en la siguiente facturación, debido a la movilización de recursos de ingeniería fuera de horario.</li>
+                <li><strong>2. Alcance de la Garantía:</strong> El soporte técnico cubre exclusivamente errores derivados del código original entregado por Leviatham Core. No cubrimos inestabilidad causada por la instalación de plugins de terceros no auditados, manipulación del código fuente por personal ajeno a la agencia, o fallos en servidores externos no administrados por nosotros.</li>
+                <li><strong>3. Política de Datos y Backups:</strong> Leviatham Core no se hace responsable por la pérdida parcial o total de datos si el cliente ha optado por no contratar el servicio de Copias de Seguridad (Backups) automatizadas. Se recomienda encarecidamente mantener el plan de mantenimiento activo.</li>
+                <li><strong>4. Tiempos de Resolución:</strong> Los tiempos estipulados en la matriz SLA refieren al tiempo máximo para la primera respuesta humana calificada y diagnóstico inicial. La resolución definitiva dependerá de la complejidad técnica del incidente.</li>
+            </ul>
+        </div>
+
+        <div class="sig-container">
             <div class="signature-3d">33discosduros</div>
-            <span class="signature-sub">LEVIATHAM CORE ARCHITECT</span>
         </div>
 
     </div>
-
-    <div class="admin-modal" id="adminModal">
-        <div class="admin-content">
-            <span class="close-admin" id="closeAdmin">&times;</span>
-            
-            <div class="admin-login" id="adminLoginScreen">
-                <i class="fa-solid fa-fingerprint" style="font-size:3rem; color:var(--primary); margin-bottom:20px;"></i>
-                <h2 style="color:var(--primary); font-family:'Orbitron'; margin-bottom:20px; letter-spacing:2px;">ACCESO DE COMANDO</h2>
-                <input type="password" id="adminPass" class="form-input" placeholder="ACCESS KEY" style="text-align:center; font-size:1.2rem; letter-spacing:5px; margin-bottom:20px;">
-                <button id="btnUnlock" class="btn-submit">DESBLOQUEAR</button>
-                <p id="loginError" style="color:var(--danger); margin-top:15px; display:none; font-weight:bold;">CLAVE INCORRECTA</p>
-            </div>
-
-            <div class="admin-tickets" id="adminDashboard">
-                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:15px; margin-bottom:20px;">
-                    <h2 style="color:var(--gold); font-family:'Orbitron'; margin:0;">TICKETS ENTRANTES</h2>
-                    <button onclick="loadTickets()" style="background:none; border:1px solid var(--primary); color:var(--primary); padding:5px 15px; border-radius:4px; cursor:pointer;"><i class="fa-solid fa-rotate"></i></button>
-                </div>
-                
-                <div id="ticketsList" style="max-height:600px; overflow-y:auto; padding-right:5px;">
-                    <p style="color:#666; text-align:center;">Inicializando conexión segura...</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script type="module">
-        // ==========================================
-        // 1. UI LOGIC (CRITICAL - MUST RUN FIRST)
-        // ==========================================
-        
-        // Header Logic (Fixed for Publication)
-        const headerBtn = document.getElementById('header-trigger-btn');
-        const navMenu = document.getElementById('nav-menu');
-        const header = document.querySelector('header');
-        
-        // Check if elements exist before adding listeners to avoid null errors
-        if(headerBtn && navMenu) {
-            headerBtn.addEventListener('click', (e) => {
-                e.preventDefault(); // Prevent weird default behaviors
-                e.stopPropagation(); // Stop event bubbling
-                navMenu.classList.toggle('active');
-                header.classList.toggle('open');
-                console.log('Menu toggled'); // Debug
-            });
-        } else {
-            console.error("Critical UI Error: Menu elements not found in DOM");
-        }
-
-        // Scroll to form
-        const createBtn = document.getElementById('btnCreateTicket');
-        if(createBtn) {
-            createBtn.addEventListener('click', () => {
-                const formSection = document.getElementById('ticketFormSection');
-                if(formSection) formSection.scrollIntoView({behavior: 'smooth'});
-            });
-        }
-
-        // Auto-fill User Agent
-        const uaField = document.getElementById('userAgentField');
-        if(uaField) {
-            uaField.value = navigator.platform + " | " + navigator.userAgent.split(') ')[0] + ")";
-        }
-
-        // ==========================================
-        // 2. FIREBASE LOGIC (WRAPPED FOR SAFETY)
-        // ==========================================
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, query, orderBy, Timestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-
-        // Wrap in a try-catch to prevent JS crash if config is missing
-        try {
-            const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
-                apiKey: "", 
-                authDomain: "tarotastral-dc552.firebaseapp.com",
-                projectId: "tarotastral-dc552",
-                storageBucket: "tarotastral-dc552.firebasestorage.app",
-                messagingSenderId: "666976665528",
-                appId: "1:666976665528:web:c2b4c27c3e50b9a953194d"
-            };
-
-            const app = initializeApp(firebaseConfig);
-            const db = getFirestore(app);
-            const auth = getAuth(app);
-            const appId = typeof __app_id !== 'undefined' ? __app_id : "default-app-id";
-            
-            // AUTENTICACIÓN
-            const initAuth = async () => {
-                try {
-                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                        await signInWithCustomToken(auth, __initial_auth_token);
-                    } else {
-                        await signInAnonymously(auth);
-                    }
-                } catch (error) {
-                    console.error("Auth Error:", error);
-                }
-            };
-            initAuth();
-
-            // FORM SUBMIT LOGIC
-            const supportForm = document.getElementById('supportForm');
-            if(supportForm) {
-                supportForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const btn = document.querySelector('.btn-submit');
-                    const originalText = btn.innerHTML;
-                    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ENVIANDO...';
-                    btn.disabled = true;
-                    
-                    try {
-                        if (!auth.currentUser) {
-                             await new Promise((resolve) => {
-                                const unsubscribe = onAuthStateChanged(auth, (user) => {
-                                    if (user) { unsubscribe(); resolve(user); }
-                                });
-                             });
-                        }
-
-                        // Collect Data
-                        const ticketData = {
-                            type: document.getElementById('ticketType').value,
-                            priority: document.getElementById('ticketPriority').value,
-                            msg: document.getElementById('ticketMsg').value,
-                            contact: document.getElementById('ticketContact').value,
-                            link: document.getElementById('ticketLink').value,
-                            env: document.getElementById('userAgentField').value,
-                            date: Timestamp.now(),
-                            status: 'open'
-                        };
-
-                        await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'tickets'), ticketData);
-
-                        alert('TICKET REGISTRADO EN EL NÚCLEO. ID GENERADO.');
-                        supportForm.reset();
-                        // Reset readonly field
-                        document.getElementById('userAgentField').value = navigator.platform + " | " + navigator.userAgent.split(') ')[0] + ")";
-
-                    } catch (error) {
-                        console.error("Error:", error);
-                        alert('ERROR DE CONEXIÓN AL NÚCLEO. INTENTE WHATSAPP.');
-                    } finally {
-                        btn.innerHTML = originalText;
-                        btn.disabled = false;
-                    }
-                });
-            }
-
-            // ADMIN PANEL LOGIC
-            const trigger = document.getElementById('secretAdminTrigger');
-            const modal = document.getElementById('adminModal');
-            const closeBtn = document.getElementById('closeAdmin');
-            const unlockBtn = document.getElementById('btnUnlock');
-            const loginScreen = document.getElementById('adminLoginScreen');
-            const dashboard = document.getElementById('adminDashboard');
-            const ticketsList = document.getElementById('ticketsList');
-            let clickCount = 0;
-
-            if(trigger) {
-                trigger.addEventListener('click', () => {
-                    clickCount++;
-                    if(clickCount === 5) {
-                        modal.style.display = 'flex';
-                        clickCount = 0;
-                    }
-                });
-            }
-
-            if(closeBtn) {
-                closeBtn.addEventListener('click', () => {
-                    modal.style.display = 'none';
-                    loginScreen.style.display = 'block';
-                    dashboard.style.display = 'none';
-                    document.getElementById('adminPass').value = '';
-                    document.getElementById('loginError').style.display = 'none';
-                });
-            }
-
-            if(unlockBtn) {
-                unlockBtn.addEventListener('click', async () => {
-                    const pass = document.getElementById('adminPass').value;
-                    if(pass === "Leviatham33") {
-                        loginScreen.style.display = 'none';
-                        dashboard.style.display = 'block';
-                        loadTickets();
-                    } else {
-                        document.getElementById('loginError').style.display = 'block';
-                    }
-                });
-            }
-
-            // Global scope for HTML onclick
-            window.loadTickets = async function() {
-                ticketsList.innerHTML = '<p style="color:#888; text-align:center;">Descifrando base de datos...</p>';
-                try {
-                    const q = query(collection(db, 'artifacts', appId, 'public', 'data', 'tickets'), orderBy("date", "desc")); 
-                    const querySnapshot = await getDocs(q);
-                    
-                    ticketsList.innerHTML = '';
-                    if(querySnapshot.empty) {
-                        ticketsList.innerHTML = '<p style="text-align:center; color:#666;">NO HAY TICKETS ACTIVOS EN LA MATRIZ.</p>';
-                        return;
-                    }
-
-                    querySnapshot.forEach((doc) => {
-                        const data = doc.data();
-                        const date = data.date ? data.date.toDate().toLocaleString() : 'N/A';
-                        
-                        // Safety check for fields
-                        const priority = data.priority || 'N/A';
-                        const env = data.env || 'Unknown';
-
-                        const ticketHTML = `
-                            <div class="ticket-item">
-                                <div class="ticket-meta">
-                                    <span><i class="fa-regular fa-clock"></i> ${date}</span>
-                                    <span style="color:var(--secondary)">ID: ${doc.id.substr(0,5).toUpperCase()}</span>
-                                </div>
-                                <div class="ticket-reason">
-                                    <span style="color:${priority === 'Alta' ? 'var(--danger)' : 'var(--primary)'}">[${priority.toUpperCase()}]</span> 
-                                    ${data.type.toUpperCase()}
-                                </div>
-                                <div class="ticket-body">
-                                    ${data.msg}
-                                    <br><br>
-                                    <div style="font-size:0.8rem; color:#666; border-top:1px dashed #333; padding-top:5px; margin-top:5px;">
-                                        SYS: ${env}
-                                    </div>
-                                    <strong style="color:var(--primary);"><i class="fa-solid fa-address-card"></i> ${data.contact}</strong>
-                                </div>
-                                <a href="${data.link}" target="_blank" class="ticket-link"><i class="fa-solid fa-link"></i> VER SITIO</a>
-                            </div>
-                        `;
-                        ticketsList.innerHTML += ticketHTML;
-                    });
-                } catch (e) {
-                    ticketsList.innerHTML = '<p style="color:red; text-align:center;">ERROR DE LECTURA DE DATOS.</p>';
-                    console.error(e);
-                }
-            }
-        } catch (globalErr) {
-            console.error("Firebase Core Error:", globalErr);
-            // Even if Firebase fails, the menu (UI LOGIC above) will still work.
-        }
-    </script>
 
 </body>
 </html>
