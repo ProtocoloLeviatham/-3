@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cotizador Táctico | Leviatham Core</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2881/2881142.png">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #050505;
+            --primary: #00f2ea;
+            --secondary: #7000ff;
+            --gold: #ffd700;
+            --text-main: #ffffff;
+            --text-muted: #cccccc;
+            --card-bg: rgba(20, 20, 25, 0.95);
+            --border-neon: 1px solid rgba(0, 242, 234, 0.5);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            min-height: 100vh;
+            padding-bottom: 140px; /* Espacio para el total flotante */
+        }
+
+        /* --- SCROLLBAR PERSONALIZADA --- */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; border: 1px solid #000; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--secondary); }
+
+        /* --- FONDO ANIMADO --- */
+        .cyber-background {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background: linear-gradient(180deg, #020203 10%, #0a0514 100%);
+        }
+        .cyber-grid {
+            position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
+            background-image: linear-gradient(rgba(0, 242, 234, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 234, 0.08) 1px, transparent 1px);
+            background-size: 40px 40px;
+            transform: perspective(500px) rotateX(60deg);
+            animation: gridMove 20s linear infinite; opacity: 0.5;
+        }
+        @keyframes gridMove { 0% { transform: perspective(500px) rotateX(60deg) translateY(0); } 100% { transform: perspective(500px) rotateX(60deg) translateY(40px); } }
+
+        h1, h2, h3, h4, .price-display, .option-title, .total-number { font-family: 'Orbitron', sans-serif; }
+
+        /* --- CONTENEDOR CENTRAL (Ventana compacta) --- */
+        .main-container { 
+            width: 100%; 
+            padding: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            max-width: 700px; /* Ventana más chica */
+            margin: 0 auto; 
+        }
+
+        /* --- HERO --- */
+        .hero-quote { text-align: center; margin-top: 40px; margin-bottom: 40px; }
+        .hero-quote h1 { 
+            font-size: 2rem; margin-bottom: 10px; color: #fff; 
+            text-shadow: 0 0 20px rgba(0,242,234,0.8); text-transform: uppercase; letter-spacing: 2px;
+        }
+        .hero-quote p { 
+            color: var(--text-muted); font-size: 0.9rem; max-width: 90%; margin: 0 auto; line-height: 1.6;
+            background: rgba(0,0,0,0.7); padding: 20px; border-radius: 12px; border-left: 3px solid var(--primary);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* --- SECCIONES DEL FORMULARIO --- */
+        .quote-section {
+            width: 100%; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px; padding: 25px; margin-bottom: 30px; position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8); transition: 0.3s;
+        }
+        .quote-section:hover { border-color: rgba(255,255,255,0.2); }
+
+        .section-header { 
+            display: flex; align-items: center; gap: 15px; margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;
+        }
+        .section-icon { 
+            font-size: 1.2rem; color: #000; background: var(--primary); 
+            width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; 
+            border-radius: 8px; box-shadow: 0 0 15px var(--primary); font-weight: bold;
+            transition: 0.3s;
+        }
+        .quote-section:hover .section-icon { transform: scale(1.1); box-shadow: 0 0 25px var(--primary); }
+        .section-title { font-size: 1.1rem; color: #fff; letter-spacing: 1px; margin: 0; font-weight: 700; }
+
+        /* Icon Colors per section */
+        .sec-icon-1 { background: var(--secondary); box-shadow: 0 0 15px var(--secondary); }
+        .sec-icon-2 { background: var(--primary); box-shadow: 0 0 15px var(--primary); }
+        .sec-icon-3 { background: var(--gold); box-shadow: 0 0 15px var(--gold); }
+        .sec-icon-4 { background: #ff0055; box-shadow: 0 0 15px #ff0055; }
+        .sec-icon-5 { background: #00ff88; box-shadow: 0 0 15px #00ff88; }
+
+        /* INPUTS TEXTO */
+        .input-group { margin-bottom: 20px; }
+        .label-tech { display: block; color: var(--primary); font-size: 0.8rem; margin-bottom: 8px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+        .input-tech, .textarea-tech, .select-tech {
+            width: 100%; padding: 12px; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 6px; color: #fff; font-family: 'Inter'; font-size: 0.95rem; outline: none; transition: 0.3s;
+        }
+        .input-tech:focus, .textarea-tech:focus, .select-tech:focus { 
+            border-color: var(--primary); box-shadow: 0 0 10px rgba(0, 242, 234, 0.4); 
+            background: rgba(0,0,0,0.8);
+        }
+        .select-tech option { background: #000; color: #fff; }
+        .textarea-tech { height: 80px; resize: vertical; }
+
+        /* GRID SELECCIÓN (RADIO/CHECKBOX CARDS) */
+        .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; }
+        
+        .option-card {
+            background: rgba(30, 30, 35, 0.8); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px; padding: 15px; cursor: pointer; transition: 0.2s; position: relative;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+            min-height: 120px;
+        }
+        .option-card:hover { transform: translateY(-3px); background: rgba(255,255,255,0.05); }
+        
+        /* Estado seleccionado */
+        .option-input { display: none; } 
+        .option-input:checked + .option-card {
+            border: 2px solid var(--primary); 
+            background: rgba(0, 242, 234, 0.1);
+            box-shadow: 0 0 15px rgba(0, 242, 234, 0.3);
+        }
+        .option-input:checked + .option-card::after {
+            content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
+            position: absolute; top: 8px; right: 8px; color: var(--primary); font-size: 1rem;
+        }
+
+        .opt-icon { font-size: 1.8rem; color: #888; margin-bottom: 10px; transition: 0.3s; }
+        .option-input:checked + .option-card .opt-icon { color: var(--primary); transform: scale(1.1); text-shadow: 0 0 10px var(--primary); }
+        
+        .opt-title { font-size: 0.85rem; color: #fff; font-weight: 700; margin-bottom: 5px; line-height: 1.2; }
+        .opt-price { font-size: 0.9rem; color: var(--gold); font-weight: 800; font-family: 'Orbitron'; }
+        
+        /* CONTADORES */
+        .counter-wrapper { 
+            display: flex; align-items: center; justify-content: space-between; 
+            background: rgba(0,0,0,0.4); padding: 12px; border-radius: 8px; 
+            border: 1px solid rgba(255,255,255,0.1); margin-bottom: 10px; 
+        }
+        .counter-label { font-size: 0.9rem; color: #fff; font-weight: 600; display: flex; flex-direction: column; }
+        .counter-price { color: var(--gold); font-size: 0.8rem; }
+        .input-number { 
+            width: 60px; padding: 8px; background: #000; border: 1px solid var(--primary); 
+            color: #fff; border-radius: 5px; text-align: center; font-weight: bold; font-family: 'Orbitron'; outline: none;
+        }
+        .input-number:focus { box-shadow: 0 0 10px var(--primary); }
+
+        /* --- TOTAL FLOTANTE (Compacto) --- */
+        .total-bar {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 600px;
+            background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(15px);
+            border: 1px solid var(--primary); border-radius: 50px; padding: 10px 25px; z-index: 4000;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 10px 40px rgba(0, 242, 234, 0.15);
+        }
+        
+        .total-info { display: flex; flex-direction: column; }
+        .total-display { font-size: 0.7rem; color: #aaa; text-transform: uppercase; letter-spacing: 1px; }
+        .total-number { color: var(--primary); font-weight: 900; font-size: 1.5rem; text-shadow: 0 0 10px rgba(0,242,234,0.5); margin-right: 15px; }
+        .ars-approx { font-size: 0.7rem; color: #666; font-weight: 400; }
+
+        .btn-quote {
+            background: linear-gradient(135deg, var(--primary), #00c2bb); color: #000;
+            padding: 12px 25px; border-radius: 30px; border: none; font-size: 0.9rem;
+            font-weight: 800; font-family: 'Orbitron'; cursor: pointer;
+            display: flex; align-items: center; gap: 8px; text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(0, 242, 234, 0.4); transition: 0.3s; white-space: nowrap;
+        }
+        .btn-quote:hover { transform: scale(1.05); background: #fff; box-shadow: 0 0 25px #fff; }
+
+        /* --- TÉRMINOS FOOTER (MEJORADO) --- */
+        .legal-footer {
+            margin-top: 50px; padding: 30px; border-top: 2px solid var(--secondary);
+            background: linear-gradient(180deg, rgba(10,10,15,0.8), rgba(0,0,0,0.9)); border-radius: 12px;
+            text-align: left; width: 100%; box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+        }
+        .legal-header { 
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; 
+            border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;
+        }
+        .legal-title { color: var(--text-main); font-size: 1rem; font-weight: 700; font-family: 'Orbitron'; letter-spacing: 1px; }
+        .btn-help {
+            text-decoration: none; background: rgba(255,255,255,0.1); color: var(--gold); 
+            padding: 8px 15px; border-radius: 4px; font-size: 0.75rem; font-weight: 700;
+            border: 1px solid var(--gold); transition: 0.3s;
+        }
+        .btn-help:hover { background: var(--gold); color: #000; }
+
+        .legal-content { font-size: 0.85rem; color: #888; line-height: 1.8; text-align: justify; }
+        .legal-content p { margin-bottom: 10px; }
+        .legal-content strong { color: var(--primary); }
+
+        /* Icono de regresar */
+        .back-btn {
+            position: absolute; top: 20px; left: 20px; color: var(--text-muted); 
+            text-decoration: none; font-size: 1.5rem; transition: 0.3s; z-index: 100;
+        }
+        .back-btn:hover { color: var(--primary); }
+
+    </style>
+</head>
+<body>
+
+    <div class="cyber-background"><div class="cyber-grid"></div></div>
+
+    <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+
+    <div class="main-container">
+
+        <div class="hero-quote">
+            <h1>Cotizador <span style="color:var(--primary)">Táctico</span></h1>
+            <p>Configura tu ecosistema digital. Selecciona módulos estratégicos, infraestructura escalable y herramientas de IA para obtener una estimación de inversión precisa en tiempo real.</p>
+        </div>
+
+        <form id="quoteForm" style="width: 100%;">
+            
+            <!-- 1. DATOS DEL PROYECTO -->
+            <div class="quote-section">
+                <div class="section-header">
+                    <div class="section-icon sec-icon-1"><i class="fa-solid fa-fingerprint" style="color:#fff;"></i></div>
+                    <h3 class="section-title">01. PERFIL DE PROYECTO</h3>
+                </div>
+                
+                <div class="input-group">
+                    <label class="label-tech">Nombre del Proyecto / Marca</label>
+                    <input type="text" class="input-tech" id="projName" placeholder="Ej: TechNova Solutions">
+                </div>
+                
+                <div class="input-group">
+                    <label class="label-tech">Idea General</label>
+                    <textarea class="textarea-tech" id="projDesc" placeholder="Describe brevemente tu visión..."></textarea>
+                </div>
+
+                <div class="options-grid" style="grid-template-columns: 1fr 1fr;">
+                    <div class="input-group">
+                        <label class="label-tech">Meta Principal</label>
+                        <select class="select-tech" id="projMeta">
+                            <option value="Ventas">Ventas Online</option>
+                            <option value="Leads">Captación de Clientes</option>
+                            <option value="Branding">Posicionamiento de Marca</option>
+                            <option value="Educación">Educación / Cursos</option>
+                            <option value="SaaS">SaaS / Software</option>
+                            <option value="Automatización">Automatización</option>
+                            <option value="Portfolio">Portfolio / Showcase</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="label-tech">Capital (USD)</label>
+                        <select class="select-tech" id="projCapital">
+                            <option value="Bajo">$150 - $300</option>
+                            <option value="Medio">$300 - $600</option>
+                            <option value="Alto">$600 - $1500</option>
+                            <option value="Empresarial">+ $1500</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. NÚCLEO (TIPO DE WEB) -->
+            <div class="quote-section">
+                <div class="section-header">
+                    <div class="section-icon sec-icon-2"><i class="fa-solid fa-microchip" style="color:#000;"></i></div>
+                    <h3 class="section-title">02. NÚCLEO DEL SISTEMA</h3>
+                </div>
+                
+                <div class="options-grid">
+                    <label>
+                        <input type="radio" name="coreWeb" class="option-input" value="150" data-name="Landing Page" onchange="calcTotal()">
+                        <div class="option-card">
+                            <i class="fa-solid fa-rocket opt-icon"></i>
+                            <div class="opt-title">Landing Page</div>
+                            <div class="opt-price">$150</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="coreWeb" class="option-input" value="250" data-name="Web Corporativa" onchange="calcTotal()">
+                        <div class="option-card">
+                            <i class="fa-solid fa-building opt-icon"></i>
+                            <div class="opt-title">Corporativa</div>
+                            <div class="opt-price">$250</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="coreWeb" class="option-input" value="500" data-name="E-Commerce" onchange="calcTotal()">
+                        <div class="option-card">
+                            <i class="fa-solid fa-cart-shopping opt-icon"></i>
+                            <div class="opt-title">E-Commerce</div>
+                            <div class="opt-price">$500</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="coreWeb" class="option-input" value="280" data-name="Media & Noticias" onchange="calcTotal()">
+                        <div class="option-card">
+                            <i class="fa-solid fa-newspaper opt-icon"></i>
+                            <div class="opt-title">Noticias</div>
+                            <div class="opt-price">$280</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="coreWeb" class="option-input" value="450" data-name="Web Inmobiliaria" onchange="calcTotal()">
+                        <div class="option-card">
+                            <i class="fa-solid fa-house-chimney opt-icon"></i>
+                            <div class="opt-title">Inmobiliaria</div>
+                            <div class="opt-price">$450</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="coreWeb" class="option-input" value="650" data-name="Plataforma LMS" onchange="calcTotal()">
+                        <div class="option-card">
+                            <i class="fa-solid fa-graduation-cap opt-icon"></i>
+                            <div class="opt-title">Cursos LMS</div>
+                            <div class="opt-price">$650</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="coreWeb" class="option-input" value="350" data-name="Web Catálogo" onchange="calcTotal()">
+                        <div class="option-card">
+                            <i class="fa-solid fa-book-open opt-icon"></i>
+                            <div class="opt-title">Catálogo</div>
+                            <div class="opt-price">$350</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="coreWeb" class="option-input" value="0" data-name="Desarrollo a Medida" onchange="calcTotal()">
+                        <div class="option-card">
+                            <i class="fa-solid fa-code opt-icon"></i>
+                            <div class="opt-title">Personalizado</div>
+                            <div class="opt-price">--</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 3. INFRAESTRUCTURA -->
+            <div class="quote-section">
+                <div class="section-header">
+                    <div class="section-icon sec-icon-3"><i class="fa-solid fa-server" style="color:#000;"></i></div>
+                    <h3 class="section-title">03. INFRAESTRUCTURA</h3>
+                </div>
+
+                <div class="options-grid">
+                    <label>
+                        <input type="checkbox" class="option-input infra-check" value="10" data-name="Sistema de Anuncios" onchange="calcTotal()">
+                        <div class="option-card">
+                            <i class="fa-solid fa-rectangle-ad opt-icon"></i>
+                            <div class="opt-title">Sistema Ads</div>
+                            <div class="opt-price">+$10</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="checkbox" class="option-input infra-check" value="0" data-name="Hosting Premium (A Cotizar)" onchange="calcTotal()">
+                        <div class="option-card">
+                            <i class="fa-solid fa-hard-drive opt-icon"></i>
+                            <div class="opt-title">Hosting Premium</div>
+                            <div class="opt-price">--</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="checkbox" class="option-input infra-check" value="0" data-name="Dominio Especial (A Cotizar)" onchange="calcTotal()">
+                        <div class="option-card">
+                            <i class="fa-solid fa-globe opt-icon"></i>
+                            <div class="opt-title">Dominio Pro</div>
+                            <div class="opt-price">--</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 4. IMPLEMENTACIONES -->
+            <div class="quote-section">
+                <div class="section-header">
+                    <div class="section-icon sec-icon-4"><i class="fa-solid fa-puzzle-piece" style="color:#fff;"></i></div>
+                    <h3 class="section-title">04. IMPLEMENTACIONES</h3>
+                </div>
+
+                <div class="options-grid">
+                    <label>
+                        <input type="checkbox" class="option-input impl-check" value="5" data-name="Diseño Logo Básico" onchange="calcTotal()">
+                        <div class="option-card">
+                            <i class="fa-solid fa-pen-nib opt-icon"></i>
+                            <div class="opt-title">Logo Básico</div>
+                            <div class="opt-price">+$5</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="checkbox" class="option-input impl-check" value="15" data-name="Chatbot Básico" onchange="calcTotal()">
+                        <div class="option-card">
+                            <i class="fa-solid fa-message opt-icon"></i>
+                            <div class="opt-title">Chatbot Lite</div>
+                            <div class="opt-price">+$15</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="checkbox" class="option-input impl-check" value="30" data-name="Chatbot Avanzado" onchange="calcTotal()">
+                        <div class="option-card">
+                            <i class="fa-solid fa-robot opt-icon"></i>
+                            <div class="opt-title">Chatbot Pro</div>
+                            <div class="opt-price">+$30</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="checkbox" class="option-input impl-check" value="25" data-name="Pasarela Pagos" onchange="calcTotal()">
+                        <div class="option-card">
+                            <i class="fa-solid fa-credit-card opt-icon"></i>
+                            <div class="opt-title">Pagos Online</div>
+                            <div class="opt-price">+$25</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="checkbox" class="option-input impl-check" value="50" data-name="Envíos & Logística" onchange="calcTotal()">
+                        <div class="option-card">
+                            <i class="fa-solid fa-truck-fast opt-icon"></i>
+                            <div class="opt-title">Logística</div>
+                            <div class="opt-price">+$50</div>
+                        </div>
+                    </label>
+                </div>
+
+                <div style="margin-top:20px;">
+                    <label class="label-tech">Gestión Automática IA (Agentes)</label>
+                    <select class="select-tech" id="aiManagement" onchange="calcTotal()">
+                        <option value="0" data-name="No">No incluir</option>
+                        <option value="50" data-name="IA Nivel 1">Nivel 1: Respuestas ($50)</option>
+                        <option value="100" data-name="IA Nivel 2">Nivel 2: Gestión ($100)</option>
+                        <option value="200" data-name="IA Nivel 3">Nivel 3: Autonomía ($200)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 5. EXTENSIONES -->
+            <div class="quote-section">
+                <div class="section-header">
+                    <div class="section-icon sec-icon-5"><i class="fa-solid fa-layer-group" style="color:#000;"></i></div>
+                    <h3 class="section-title">05. EXTENSIONES</h3>
+                </div>
+
+                <div class="counter-wrapper">
+                    <div class="counter-label">Secciones Extra Simples <span class="counter-price">($10 c/u)</span></div>
+                    <input type="number" min="0" value="0" class="input-number" id="extraSimple" onchange="calcTotal()">
+                </div>
+                
+                <div class="counter-wrapper">
+                    <div class="counter-label">Secciones Extra Avanzadas <span class="counter-price">($30 c/u)</span></div>
+                    <input type="number" min="0" value="0" class="input-number" id="extraAdv" onchange="calcTotal()">
+                </div>
+
+                <div class="options-grid" style="margin-top:20px;">
+                    <label>
+                        <input type="checkbox" class="option-input ext-check" value="10" data-name="Burbuja Social" onchange="calcTotal()">
+                        <div class="option-card">
+                            <i class="fa-brands fa-whatsapp opt-icon"></i>
+                            <div class="opt-title">WhatsApp Btn</div>
+                            <div class="opt-price">+$10</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="checkbox" class="option-input ext-check" value="50" data-name="SEO Técnico" onchange="calcTotal()">
+                        <div class="option-card">
+                            <i class="fa-solid fa-chart-line opt-icon"></i>
+                            <div class="opt-title">SEO Técnico</div>
+                            <div class="opt-price">+$50</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="checkbox" class="option-input ext-check" value="30" data-name="Geo IA" onchange="calcTotal()">
+                        <div class="option-card">
+                            <i class="fa-solid fa-location-dot opt-icon"></i>
+                            <div class="opt-title">Geo Posición</div>
+                            <div class="opt-price">+$30</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="checkbox" class="option-input ext-check" value="80" data-name="Sistema Usuarios" onchange="calcTotal()">
+                        <div class="option-card">
+                            <i class="fa-solid fa-user-lock opt-icon"></i>
+                            <div class="opt-title">Login Usuarios</div>
+                            <div class="opt-price">+$80</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="checkbox" class="option-input ext-check" value="20" data-name="Feed Social" onchange="calcTotal()">
+                        <div class="option-card">
+                            <i class="fa-solid fa-share-nodes opt-icon"></i>
+                            <div class="opt-title">Feed Social</div>
+                            <div class="opt-price">+$20</div>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="input-group" style="margin-top:25px;">
+                    <label class="label-tech">Ideas Adicionales</label>
+                    <textarea class="textarea-tech" id="otherIdeas" placeholder="Detalles extra, funcionalidades locas o referencias..."></textarea>
+                </div>
+            </div>
+
+            <!-- TÉRMINOS FOOTER -->
+            <div class="legal-footer">
+                <div class="legal-header">
+                    <span class="legal-title">TÉRMINOS Y CONDICIONES DE LA COTIZACIÓN</span>
+                    <a href="infraestructura.html" class="btn-help" target="_blank"><i class="fa-solid fa-circle-question"></i> AYUDA TÉCNICA</a>
+                </div>
+                <div class="legal-content">
+                    <p><strong>1. VALIDEZ DE LA OFERTA:</strong> Esta estimación de costos es preliminar y tiene una validez de 7 días hábiles a partir de su generación. Los precios pueden variar según cambios en el alcance del proyecto.</p>
+                    <p><strong>2. TIPO DE CAMBIO:</strong> Los precios expresados en ARS son referenciales y están sujetos a la cotización del dólar tarjeta/blue al momento del cierre. La moneda base de operación es el Dólar Estadounidense (USD).</p>
+                    <p><strong>3. FORMA DE PAGO:</strong> Se requiere un anticipo irrevocable del 50% para iniciar el desarrollo y reserva de equipo. El saldo restante se abona contra entrega final del producto.</p>
+                    <p><strong>4. ALCANCE TÉCNICO:</strong> Las funcionalidades no seleccionadas explícitamente en este formulario se considerarán adicionales y se cotizarán por separado.</p>
+                </div>
+            </div>
+
+        </form>
+
+        <div class="total-bar">
+            <div class="total-info">
+                <span class="total-display">TOTAL ESTIMADO</span>
+                <span class="ars-approx" id="arsTotal">≈ $0 ARS</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:15px;">
+                <div class="total-number" id="usdTotal">$0</div>
+                <button class="btn-quote" onclick="sendToWhatsapp()">
+                    <i class="fa-brands fa-whatsapp"></i> COTIZAR
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const DOLLAR_RATE = 1150; 
+
+        function calcTotal() {
+            let total = 0;
+
+            const core = document.querySelector('input[name="coreWeb"]:checked');
+            if (core) total += parseInt(core.value);
+
+            document.querySelectorAll('.infra-check:checked').forEach(el => total += parseInt(el.value));
+            document.querySelectorAll('.impl-check:checked').forEach(el => total += parseInt(el.value));
+            
+            const iaSelect = document.getElementById('aiManagement');
+            total += parseInt(iaSelect.value);
+
+            const simpleExt = document.getElementById('extraSimple').value || 0;
+            const advExt = document.getElementById('extraAdv').value || 0;
+            total += (simpleExt * 10);
+            total += (advExt * 30);
+
+            document.querySelectorAll('.ext-check:checked').forEach(el => total += parseInt(el.value));
+
+            document.getElementById('usdTotal').innerText = `$${total}`;
+            document.getElementById('arsTotal').innerText = `≈ $${(total * DOLLAR_RATE).toLocaleString('es-AR')} ARS`;
+        }
+
+        function sendToWhatsapp() {
+            const name = document.getElementById('projName').value || "Sin Nombre";
+            const desc = document.getElementById('projDesc').value || "No especificada";
+            const meta = document.getElementById('projMeta').value;
+            const capital = document.getElementById('projCapital').value;
+            
+            const coreEl = document.querySelector('input[name="coreWeb"]:checked');
+            const coreName = coreEl ? coreEl.getAttribute('data-name') : "No seleccionado";
+            const corePrice = coreEl ? `$${coreEl.value}` : "$0";
+            
+            // INFRAESTRUCTURA
+            const ads = document.querySelector('input[data-name="Sistema de Anuncios"]').checked ? "Sí" : "No";
+            const hosting = document.querySelector('input[data-name="Hosting Premium (A Cotizar)"]').checked ? "Sí" : "No";
+            const dominio = document.querySelector('input[data-name="Dominio Especial (A Cotizar)"]').checked ? "Sí" : "No";
+
+            // IMPLEMENTACIONES
+            const logo = document.querySelector('input[data-name="Diseño Logo Básico"]').checked ? "Sí" : "No";
+            const chatLite = document.querySelector('input[data-name="Chatbot Básico"]').checked ? "Sí" : "No";
+            const chatPro = document.querySelector('input[data-name="Chatbot Avanzado"]').checked ? "Sí" : "No";
+            const pagos = document.querySelector('input[data-name="Pasarela Pagos"]').checked ? "Sí" : "No";
+            const logistica = document.querySelector('input[data-name="Envíos & Logística"]').checked ? "Sí" : "No";
+            const iaVal = document.getElementById('aiManagement');
+            const iaText = iaVal.value > 0 ? iaVal.options[iaVal.selectedIndex].text : "No";
+
+            // EXTENSIONES
+            const sSimpVal = document.getElementById('extraSimple').value;
+            const sSimp = sSimpVal > 0 ? `Sí, ${sSimpVal} secciones` : "No";
+            
+            const sAdvVal = document.getElementById('extraAdv').value;
+            const sAdv = sAdvVal > 0 ? `Sí, ${sAdvVal} secciones` : "No";
+
+            const wpp = document.querySelector('input[data-name="Burbuja Social"]').checked ? "Sí" : "No";
+            const seo = document.querySelector('input[data-name="SEO Técnico"]').checked ? "Sí" : "No";
+            const geo = document.querySelector('input[data-name="Geo IA"]').checked ? "Sí" : "No";
+            const login = document.querySelector('input[data-name="Sistema Usuarios"]').checked ? "Sí" : "No";
+            const feed = document.querySelector('input[data-name="Feed Social"]').checked ? "Sí" : "No";
+
+            const ideas = document.getElementById('otherIdeas').value || "Ninguna";
+            const total = document.getElementById('usdTotal').innerText;
+
+            // MENSAJE PROTOCOLO EXACTO
+            let msg = `1- Perfil del proyecto%0A%0A`;
+            msg += `Nombre del proyecto: ${name}%0A`;
+            msg += `Idea general: ${desc}%0A`;
+            msg += `Meta principal: ${meta}%0A`;
+            msg += `Capital: ${capital}%0A%0A`;
+            
+            msg += `2- Núcleo del sistema%0A${coreName} (${corePrice})%0A%0A`;
+            
+            msg += `3- Infraestructura%0A%0A`;
+            msg += `Sistema de ads: ${ads}%0A`;
+            msg += `Hosting premium: ${hosting}%0A`;
+            msg += `Dominio premium: ${dominio}%0A%0A`;
+
+            msg += `4- Implementaciónes%0A%0A`;
+            msg += `Logo básico: ${logo}%0A`;
+            msg += `Chatbot lite: ${chatLite}%0A`;
+            msg += `Chatbot pro: ${chatPro}%0A`;
+            msg += `Pagos online: ${pagos}%0A`;
+            msg += `Logística: ${logistica}%0A`;
+            msg += `Gestión IA: ${iaText}%0A%0A`;
+
+            msg += `5- Extensiones%0A%0A`;
+            msg += `Sección simple: ${sSimp}%0A`;
+            msg += `Sección avanzada: ${sAdv}%0A`;
+            msg += `Botón de wpp: ${wpp}%0A`;
+            msg += `Seo técnico: ${seo}%0A`;
+            msg += `Geo posición: ${geo}%0A`;
+            msg += `Login usuarios: ${login}%0A`;
+            msg += `Feed social: ${feed}%0A%0A`;
+            
+            msg += `Ideas adicionales: ${ideas}%0A%0A`;
+            
+            msg += `TOTAL ESTIMADO: ${total}`;
+
+            window.open(`https://wa.me/1234567890?text=${msg}`, '_blank');
+        }
+    </script>
+
+</body>
+</html>
